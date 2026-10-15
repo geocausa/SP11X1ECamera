@@ -156,3 +156,12 @@ but not yet the daily default); only one camera streams at a time (shared
 CSID1/VFE1); the rear 4K stream is scaled to 1080p for applications.
 A systemd hardware watchdog (60 s) is enabled; it does not cover hangs before
 systemd starts.
+
+## Open front start-up profile (2026-10-15)
+
+Path step 1 is done for the front camera: the daily stack (camss module 49) loads an
+open profile generated from this repository (register list, our LSC mesh and noise
+LUT, sRGB start-up gamma, zeros for switched-off modules). The private
+`imx681-2560x1440-nv12-v1.bin` is no longer installed or read. A/B against the
+private profile on hardware is indistinguishable within run-to-run noise. Details:
+`docs/FRONT-OPEN-PROFILE-20261015.md`. The rear start-up input is next.

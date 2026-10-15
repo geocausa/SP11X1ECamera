@@ -3,7 +3,7 @@
 #define NATIVE_FRONT_PROFILE_H
 #include "native-front-nv12-commands.h"
 #include "native-front-profile-schema.h"
-#define NATIVE_FRONT_PROFILE_FIRMWARE "qcom/sp11/imx681-2560x1440-nv12-v1.bin"
+#define NATIVE_FRONT_PROFILE_FIRMWARE "qcom/sp11/imx681-front-open-v1.bin"
 
 /* The caller computes SHA256 over the entire immutable firmware buffer.
  * This qualification admits exactly one board/mode profile. It does not grant

@@ -7,10 +7,9 @@
 set -Eeuo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 P=/home/geoca/Documents/SP11-PROJECT
-K=$P/02-kernel/native-rgb-unified-48
+K=$P/02-kernel/native-rgb-unified-49
 B=$P/02-kernel/libcamera-unified-21
 OLD=/var/lib/sp11-camera-daily
-PRIV=$P/02-kernel/front-open-01
 D=/var/lib/sp11-camera-daily2
 BOOT=/boot/sp11-7.1.5-camera-daily2
 GOLD=/boot/sp11-7.1.5-audio-fullio-v19c
@@ -23,11 +22,17 @@ install -d -m 755 "$D" "$D/lib" "$D/lib/ipa" "$D/lib/proxy" "$D/modules" "$D/tun
 install -d -m 700 "$D/firmware" "$D/firmware/qcom" "$D/firmware/qcom/sp11"
 install -m 644 "$K/camss/qcom-camss.ko" "$K/imx681/imx681.ko" "$K/ov13858/ov13858.ko" "$D/modules/"
 install -m 644 "$OLD/modules/sp11-vd55g0.ko" "$OLD/modules/v4l2loopback.ko" "$D/modules/"
-# Private startup profile (stays on this machine) and our own measured LSC/ABF tables.
-PROFILE=$P/02-kernel/native-front-profile-20261007-01/imx681-2560x1440-nv12-v1.bin
-test "$(sha256sum "$PROFILE" | cut -d' ' -f1)" = c59a54b760a8662af650fa8961aab2224c7c0d2a0cdcdea3c9581370ac5ddd03
-install -m 600 "$PROFILE" "$D/firmware/qcom/sp11/"
-install -m 600 "$P/02-kernel/front-lsc-v1/imx681-front-lsc-v1.bin" "$PRIV/imx681-front-abf-v1.bin" "$D/firmware/qcom/sp11/"
+# Front ISP start-up profile generated from published sources only (open-profile/,
+# docs/FRONT-OPEN-PROFILE-20261015.md): register list, our LSC mesh and noise LUT.
+# Module 49 admits exactly this file's digest; no private profile is installed.
+T=$(mktemp -d)
+python3 "$HERE/../open-profile/gen-front-open-profile.py" "$HERE/../native-front-profile-schema.h" \
+  "$HERE/../front-ae/tuning/imx681-front-isp-regs.txt" "$HERE/../front-ae/tuning/imx681-front-lsc-v1.txt" \
+  "$HERE/../front-ae/tuning/imx681-front-abf-v1.json" "$T/imx681-front-open-v1.bin" \
+  "$T/imx681-front-lsc-v1.bin" "$T/imx681-front-abf-v1.bin" > "$T/sha"
+test "$(cat "$T/sha")" = "$(python3 -c "import json;print(json.load(open('$K/build-result.json'))['profile_sha256'])")"
+install -m 600 "$T/imx681-front-open-v1.bin" "$T/imx681-front-lsc-v1.bin" "$T/imx681-front-abf-v1.bin" "$D/firmware/qcom/sp11/"
+rm -rf "$T"
 install -m 644 "$HERE/../front-ae/tuning/imx681-front-v15.yaml" "$D/tuning/imx681-front.yaml"
 python3 -c "import json;j=json.load(open('$P/02-kernel/front-ae-93/run-93.json'));print(' '.join(j['camss_params']+['native_rear_generation_trial=1']))" > "$D/camss-params.txt"
 install -m 755 "$HERE/setup-daily2.py" "$D/setup.py"
