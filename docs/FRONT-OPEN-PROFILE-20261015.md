@@ -69,9 +69,7 @@ name and digest). `extract-front-regs.py` documents how the register list was de
 
 ## Remaining
 
-- Rear camera: the daily rear still reads `rear-generation-20261007-60.bin` (rear
-  shading tables and tone-mapper curve from the Windows rear tuning, plus functional
-  geometry/statistics values). Same method applies.
+- Rear camera: done the same day, see `docs/REAR-OPEN-PROFILE-20261015.md` (camss 50).
 - Upstream form: the register list should become driver code / a params-buffer uAPI
   (libcamera), not a firmware file; the start-up register list should be reduced to
   explained registers for review.

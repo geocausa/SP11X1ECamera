@@ -7,7 +7,7 @@
 set -Eeuo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 P=/home/geoca/Documents/SP11-PROJECT
-K=$P/02-kernel/native-rgb-unified-49
+K=$P/02-kernel/native-rgb-unified-50
 B=$P/02-kernel/libcamera-unified-21
 OLD=/var/lib/sp11-camera-daily
 D=/var/lib/sp11-camera-daily2
@@ -32,6 +32,13 @@ python3 "$HERE/../open-profile/gen-front-open-profile.py" "$HERE/../native-front
   "$T/imx681-front-lsc-v1.bin" "$T/imx681-front-abf-v1.bin" > "$T/sha"
 test "$(cat "$T/sha")" = "$(python3 -c "import json;print(json.load(open('$K/build-result.json'))['profile_sha256'])")"
 install -m 600 "$T/imx681-front-open-v1.bin" "$T/imx681-front-lsc-v1.bin" "$T/imx681-front-abf-v1.bin" "$D/firmware/qcom/sp11/"
+# Rear ISP start-up input, also from published sources (docs/REAR-OPEN-PROFILE-20261015.md):
+# functional geometry/statistics, our measured lens shading and start white balance.
+# Module 50 admits exactly this digest; the old rear-generation input is not used.
+python3 "$HERE/../open-profile/gen-rear-open-input.py" "$HERE/../front-ae/tuning/ov13858-rear-startup.json" \
+  "$HERE/../front-ae/tuning/ov13858-rear-lsc-v1.txt" "$T/ov13858-rear-open-v1.bin" > "$T/rsha"
+test "$(cat "$T/rsha")" = "$(python3 -c "import json;print(json.load(open('$K/build-result.json'))['rear_input_sha256'])")"
+install -m 600 "$T/ov13858-rear-open-v1.bin" "$D/firmware/qcom/sp11/"
 rm -rf "$T"
 install -m 644 "$HERE/../front-ae/tuning/imx681-front-v15.yaml" "$D/tuning/imx681-front.yaml"
 python3 -c "import json;j=json.load(open('$P/02-kernel/front-ae-93/run-93.json'));print(' '.join(j['camss_params']+['native_rear_generation_trial=1']))" > "$D/camss-params.txt"

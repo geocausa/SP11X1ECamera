@@ -165,3 +165,11 @@ LUT, sRGB start-up gamma, zeros for switched-off modules). The private
 `imx681-2560x1440-nv12-v1.bin` is no longer installed or read. A/B against the
 private profile on hardware is indistinguishable within run-to-run noise. Details:
 `docs/FRONT-OPEN-PROFILE-20261015.md`. The rear start-up input is next.
+
+## Open rear start-up input (2026-10-15)
+
+The rear camera followed (camss 50): open rear start-up input generated from this
+repository (functional geometry/statistics, BT.601 transform, our measured lens shading
+and start white balance), vendor GTM curve, PDPC and GIC switched off, BPC_ABF on our
+values. No Windows-derived input file is read by either camera.
+Details: `docs/REAR-OPEN-PROFILE-20261015.md`.
