@@ -5,6 +5,7 @@ import sys, zlib, struct
 import numpy as np
 f, W, H, bpl, out = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]), sys.argv[5]
 idx = int(sys.argv[6]) if len(sys.argv) > 6 else -1
+order = sys.argv[7] if len(sys.argv) > 7 else "RGGB"
 d = np.fromfile(f, np.uint8)
 n = len(d) // (bpl * H)
 fr = d[(idx % n) * bpl * H:((idx % n) + 1) * bpl * H].reshape(H, bpl)[:, :W * 5 // 4].reshape(H, -1, 5).astype(np.uint16)
@@ -14,7 +15,9 @@ for k in range(4):
 raw = px.reshape(H, -1)[:, :W].astype(np.float32)
 print("frames", n, "raw min/mean/max", raw.min(), round(float(raw.mean()), 1), raw.max())
 black = 64.0
-r = raw[0::2, 0::2]; g = (raw[0::2, 1::2] + raw[1::2, 0::2]) / 2; b = raw[1::2, 1::2]
+q = {o: raw[i // 2::2, i % 2::2] for i, o in enumerate(order) if o != "G"}
+gs = [raw[i // 2::2, i % 2::2] for i, o in enumerate(order) if o == "G"]
+r = q["R"]; b = q["B"]; g = (gs[0] + gs[1]) / 2
 h2, w2 = min(r.shape[0], b.shape[0]), min(r.shape[1], b.shape[1])
 rgb = np.stack([r[:h2, :w2], g[:h2, :w2], b[:h2, :w2]], -1) - black
 rgb = np.clip(rgb, 0, None)
