@@ -37,5 +37,13 @@ Other checks:
 - `dt-doc-validate` clean;
 - `dt-validate` passes the example and rejects two lanes.
 
-`patches/*.eml` are the b4 messages, prepared on the b4 branch `ov13858-x1e`
-in `06-camera/linux-sparse` on SP11 and not sent yet.
+## Sent
+
+Sent 2026-10-15 by George Neacsu through the kernel.org b4 web endpoint, as
+"[PATCH 0/2] media: ov13858: device tree support for the Surface Pro 11
+(Snapdragon)", Message-ID `20261015-ov13858-x1e-v1-0-acdd918f4fb6@gmail.com`.
+It went to Sakari Ailus, with Cc to the media/DT maintainers, Sergey
+Lebedev, German Pablo Lindo, Bryan O'Donoghue, linux-media, devicetree,
+linux-arm-msm and LKML. The content of `patches/*.eml` is as sent; only
+the dates and signatures differ. The working tree is the b4 branch
+`ov13858-x1e` in `06-camera/linux-sparse` on SP11, which b4 has moved to v2.
