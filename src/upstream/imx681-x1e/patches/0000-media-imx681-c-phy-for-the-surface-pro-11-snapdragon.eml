@@ -1,0 +1,89 @@
+From: George Neacsu <geocausa@gmail.com>
+Subject: [PATCH RFC 0/2] media: imx681: C-PHY for the Surface Pro 11
+ (Snapdragon)
+Date: Thu, 15 Oct 2026 22:25:03 +0100
+Message-Id: <20261015-imx681-x1e-v1-0-86027a072e56@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzNDA0NT3czcCjMLQ90Kw1RdC2PzlBSzJBNTU1MTJaCGgqLUtMwKsGHRSkF
+ uzkqxtbUAkZ1H1GEAAAA=
+X-Change-ID: 20261015-imx681-x1e-837dd6b45554
+To: Sergey Lebedev <lsa.uz@pm.me>, 
+ Andre Gilerson <andre.gilerson@gmail.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bryan O'Donoghue <bod@kernel.org>, 
+ German Pablo Lindo <germanpapulindez@gmail.com>, 
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792099503; l=2483;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=G4nqkJOii/sb8Gx48Kl0y0+8s9n+ILtszIr0sz0W3RU=;
+ b=Vf29WX23JT32SUIU/3VTw2ZyQFDD+EFQzmK1bRTHSVFSgKohKXpUrMrg9f1w+brrTPhjVvJld
+ UJgiUwIqPBEAzzDo0C4yd/1BP7x3ol3azymcoFSwpWJ1zd3eOtXJUK2
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
+
+Hi Sergey, Andre,
+
+The Snapdragon X Elite Surface Pro 11 (X1E80100) has the same IMX681 as its
+user-facing camera, but wired to the Qualcomm CAMSS over one MIPI C-PHY
+trio instead of two D-PHY lanes. These two patches, on top of your v8, are
+all your driver needs for it: the endpoint picks the bus, and only the
+signalling mode, the lane mode and the output PLL multiplier depend on it.
+The mode, the video timing PLL and the 720 MHz pixel rate stay as they are;
+Windows on the Snapdragon model programs the same video timing, and its
+line and frame lengths come to 720 MHz at 30 fps as well, which agrees
+with your measurement.
+
+They apply on top of v8:
+https://lore.kernel.org/all/20261002082537.74084-1-lsa.uz@pm.me/
+
+Tested on the Surface Pro 11 (X1E80100) with an out-of-tree CAMSS that
+receives C-PHY on CSIPHY2, capturing raw frames through CSID1 and an RDI
+interface:
+- probe with the endpoint on one C-PHY trio at a 1.2 GHz link frequency
+  (2.4 Gsym/s, half the symbol rate by the V4L2 convention);
+- 3844x2640 at 29.99 fps;
+- the colour-bar test pattern arrives intact;
+- a scene captures, and VBLANK still sets the frame rate (8.19 fps at
+  9000 lines);
+- the binding accepts one trio with bus-type 1 and two lanes without a
+  bus-type, and rejects one D-PHY lane or two C-PHY trios.
+
+Not tested: the D-PHY path on the Intel model. It now also writes
+CSI_LANE_MODE = 1 (two lanes), which it did not write before. German, if
+you have a moment to run v8 with these two on top, that would settle it.
+
+How would you like to take this? I am happy for you to fold the two into
+your next version, or to resend them as follow-ups once v8 is merged,
+whichever is easier for you and for Sakari.
+
+The board side, the device tree for the Surface Pro 11 cameras, depends on
+Bryan's x1e80100 camera DT and CSI2 PHY series and on C-PHY support for
+X1E in the PHY driver, so I will send it separately once those settle.
+
+Thanks for the driver,
+George
+
+---
+George Neacsu (2):
+      dt-bindings: media: sony,imx681: Allow a C-PHY bus
+      media: i2c: imx681: Add C-PHY support
+
+ .../devicetree/bindings/media/i2c/sony,imx681.yaml | 26 +++++-
+ drivers/media/i2c/imx681.c                         | 95 ++++++++++++++++------
+ 2 files changed, 93 insertions(+), 28 deletions(-)
+---
+base-commit: 07ec64fc237bfa815b380cc4e0c8b7d01ee11681
+change-id: 20261015-imx681-x1e-837dd6b45554
+
+Best regards,
+-- 
+George Neacsu <geocausa@gmail.com>
+

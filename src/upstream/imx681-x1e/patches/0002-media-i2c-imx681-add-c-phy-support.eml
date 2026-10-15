@@ -1,22 +1,30 @@
-From 79e37be46fbf2fcb5130859c67cd8fb1cf3d90b3 Mon Sep 17 00:00:00 2001
-In-Reply-To: <20261002082537.74084-1-lsa.uz@pm.me>
-References: <20261002082537.74084-1-lsa.uz@pm.me>
-From: geoca <geocausa@gmail.com>
-Date: Thu, 15 Oct 2026 22:05:24 +0100
-Subject: [RFC PATCH 2/2] media: i2c: imx681: Add C-PHY support
-To: Sergey Lebedev <lsa.uz@pm.me>,
-    Andre Gilerson <andre.gilerson@gmail.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
-    Mauro Carvalho Chehab <mchehab@kernel.org>,
-    Rob Herring <robh@kernel.org>,
-    Krzysztof Kozlowski <krzk+dt@kernel.org>,
-    Conor Dooley <conor+dt@kernel.org>,
-    Bryan O'Donoghue <bod@kernel.org>,
-    German Pablo Lindo <germanpapulindez@gmail.com>,
-    linux-media@vger.kernel.org,
-    devicetree@vger.kernel.org,
-    linux-arm-msm@vger.kernel.org,
-    linux-kernel@vger.kernel.org
+From: George Neacsu <geocausa@gmail.com>
+Date: Thu, 15 Oct 2026 22:25:05 +0100
+Subject: [PATCH RFC 2/2] media: i2c: imx681: Add C-PHY support
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261015-imx681-x1e-v1-2-86027a072e56@gmail.com>
+References: <20261015-imx681-x1e-v1-0-86027a072e56@gmail.com>
+In-Reply-To: <20261015-imx681-x1e-v1-0-86027a072e56@gmail.com>
+To: Sergey Lebedev <lsa.uz@pm.me>, 
+ Andre Gilerson <andre.gilerson@gmail.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bryan O'Donoghue <bod@kernel.org>, 
+ German Pablo Lindo <germanpapulindez@gmail.com>, 
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792099503; l=8545;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=EfvEBhMI4cDjJCXBWHch0MxiSg00MDxNZQoomRmocno=;
+ b=Vk5Zf9BzkdiQ/q/hX62CRV8GkJnpBdp/M1cB3OuUnlLCcEW6xafMYpGL512Itbu2hjIsGbXyF
+ vYE2E2O+xoQC1KWLTc7wfXXjaxmVI/pBnQgm8jcwGrNPe2NYGUfo49g
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
 
 The IMX681 also drives MIPI C-PHY. On the Surface Pro 11 with a
 Snapdragon X Elite it reaches the CAMSS CSIPHY over one C-PHY trio,
@@ -46,12 +54,9 @@ arrives intact, a scene captures, and VBLANK still sets the frame rate
 (8.19 fps at 9000 lines). The D-PHY path is not tested here.
 
 Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: geoca <geocausa@gmail.com>
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_016zd5AZNnh8f3jMZGSJKisF
+Signed-off-by: George Neacsu <geocausa@gmail.com>
 ---
- drivers/media/i2c/imx681.c | 95 +++++++++++++++++++++++++++-----------
+ drivers/media/i2c/imx681.c | 95 +++++++++++++++++++++++++++++++++-------------
  1 file changed, 69 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/media/i2c/imx681.c b/drivers/media/i2c/imx681.c
@@ -245,6 +250,7 @@ index 6c8e4b3..c660f06 100644
  				       &imx681->link_freq_bitmap);
  	if (ret)
  		ret = dev_err_probe(imx681->dev, ret,
+
 -- 
 2.53.0
 

@@ -1,22 +1,30 @@
-From c0f6c002b33fc4456df12a4e645cf5d33cc74cfa Mon Sep 17 00:00:00 2001
-In-Reply-To: <20261002082537.74084-1-lsa.uz@pm.me>
-References: <20261002082537.74084-1-lsa.uz@pm.me>
-From: geoca <geocausa@gmail.com>
-Date: Thu, 15 Oct 2026 22:05:24 +0100
-Subject: [RFC PATCH 1/2] dt-bindings: media: sony,imx681: Allow a C-PHY bus
-To: Sergey Lebedev <lsa.uz@pm.me>,
-    Andre Gilerson <andre.gilerson@gmail.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
-    Mauro Carvalho Chehab <mchehab@kernel.org>,
-    Rob Herring <robh@kernel.org>,
-    Krzysztof Kozlowski <krzk+dt@kernel.org>,
-    Conor Dooley <conor+dt@kernel.org>,
-    Bryan O'Donoghue <bod@kernel.org>,
-    German Pablo Lindo <germanpapulindez@gmail.com>,
-    linux-media@vger.kernel.org,
-    devicetree@vger.kernel.org,
-    linux-arm-msm@vger.kernel.org,
-    linux-kernel@vger.kernel.org
+From: George Neacsu <geocausa@gmail.com>
+Date: Thu, 15 Oct 2026 22:25:04 +0100
+Subject: [PATCH RFC 1/2] dt-bindings: media: sony,imx681: Allow a C-PHY bus
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261015-imx681-x1e-v1-1-86027a072e56@gmail.com>
+References: <20261015-imx681-x1e-v1-0-86027a072e56@gmail.com>
+In-Reply-To: <20261015-imx681-x1e-v1-0-86027a072e56@gmail.com>
+To: Sergey Lebedev <lsa.uz@pm.me>, 
+ Andre Gilerson <andre.gilerson@gmail.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bryan O'Donoghue <bod@kernel.org>, 
+ German Pablo Lindo <germanpapulindez@gmail.com>, 
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792099503; l=2232;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=kOFZyF2sftuWkEwjRC1kUSRJpQArgwBXcX+9V+TFh00=;
+ b=9GBIa8dhb9KsXis6fDJxkfZX7IZY3EYFRcWDYQwZtKgEHBBriV1fbo50/9RdTTG0fcvnwPmIE
+ JvH/fPdp38UD12lc7j7Nwtqka5G/o557YYbBAFsC1cwfb7mAMo2mAau
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
 
 On the Surface Pro 11 with a Snapdragon X Elite, the IMX681 reaches the
 CAMSS CSIPHY over one MIPI C-PHY trio rather than over the two D-PHY
@@ -24,12 +32,9 @@ lanes of the Intel model. Let bus-type select C-PHY, and with it a single
 data lane, keeping two D-PHY lanes as the default.
 
 Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: geoca <geocausa@gmail.com>
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_016zd5AZNnh8f3jMZGSJKisF
+Signed-off-by: George Neacsu <geocausa@gmail.com>
 ---
- .../bindings/media/i2c/sony,imx681.yaml       | 26 +++++++++++++++++--
+ .../devicetree/bindings/media/i2c/sony,imx681.yaml | 26 ++++++++++++++++++++--
  1 file changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx681.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx681.yaml
@@ -84,6 +89,7 @@ index 62e7eae..51256a7 100644
      required:
        - endpoint
  
+
 -- 
 2.53.0
 

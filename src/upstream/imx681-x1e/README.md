@@ -55,20 +55,16 @@ Not tested: the D-PHY path on the Intel model. That path now also writes
 CSI_LANE_MODE = 1. The cover letter asks German Pablo Lindo, the v8 tester,
 to check it.
 
-## Sending
+## Sent
 
-The cover letter is the coordination mail to Sergey and Andre. It asks
-whether they want to fold the two patches into their v9, or have them come
-as follow-ups after v8 merges. Addresses, In-Reply-To and Cc are already
-set. Before sending:
-
-1. Replace `geoca` with your real name in `From:`, in `Signed-off-by:` and
-   at the end of the cover letter. The kernel needs a known identity.
-2. Remove the `Co-Authored-By:` and `Claude-Session:` lines from 0001 and
-   0002. Kernel patches state AI help with the `Assisted-by:` tag, which
-   is already there.
-3. Send as plain text with `git send-email patches/*.patch`, which needs
-   Gmail's SMTP and an app password. Web Gmail breaks patches.
+Sent 2026-10-15 by George Neacsu through the kernel.org b4 web endpoint, as
+"[PATCH RFC 0/2] media: imx681: C-PHY for the Surface Pro 11 (Snapdragon)",
+Message-ID `20261015-imx681-x1e-v1-0-fd22f5f3b0c5@gmail.com`. It went to
+Sergey Lebedev and Andre Gilerson, with Cc to the media/DT maintainers,
+Bryan O'Donoghue, German Pablo Lindo, linux-media, devicetree, linux-arm-msm
+and LKML. `patches/*.eml` are the messages exactly as sent. The working tree
+is the b4 prep branch `imx681-x1e` on SP11 (06-camera/imx681-upstream), and
+b4 has moved it to v2 for any follow-up.
 
 ## Next upstream pieces (not started)
 
