@@ -1,0 +1,98 @@
+From: George Neacsu <geocausa@gmail.com>
+Subject: [PATCH RFC 0/4] phy: qcom-mipi-csi2: C-PHY for X1E80100
+Date: Thu, 15 Oct 2026 23:16:08 +0100
+Message-Id: <20261015-x1e-cphy-rfc-v1-0-1c53762898d2@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzNDA0NT3QrDVN3kgoxK3aK0ZF0jA0MLM4NkCwNL8zQloJaCotS0zAqwcdF
+ KQW7OSrG1tQCwerqKYwAAAA==
+X-Change-ID: 20261015-x1e-cphy-rfc-201860c8097f
+To: Bryan O'Donoghue <bod@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ David Heidelberg <david@ixit.cz>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, linux-phy@lists.infradead.org, 
+ linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792102568; l=3102;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=1PzFHK8pyF9EZhautPJ1LhtB2o3MzeG5L1QZKbwR3b0=;
+ b=dJas+yh5B/Bus5UcED2hSt5fQXizIMFWNtcZ3VDev+6VfYlKnuWH93eUoI5RK6inzHmabf9eD
+ 7ILmat6c7urC08O9+bofvYRg5E13/EyCF68uG5BwqFwH7JZ/ed/21DF
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
+
+Hi Bryan, Vinod, David,
+
+The Snapdragon Surface Pro 11's front camera, an IMX681, is on CSIPHY2
+over one MIPI C-PHY trio. linux-next has the CSI2 PHY driver and the CAMSS
+PHY API path, and C-PHY is the piece still missing for this camera. This
+series adds it. Before I go further, I would like to know whether this is
+the shape you want:
+
+1. PHY_MODE_MIPI_CPHY and C-PHY configuration options in the generic PHY
+   framework, because CAMSS had no way to ask the PHY for C-PHY;
+2. C-PHY in qcom-mipi-csi2, with the X1E80100 sequence taken from
+   Qualcomm's GPL-2.0 downstream header;
+3. the CSID 680 PHY type select, which is defined but never written;
+4. C-PHY in csiphy_stream_on() for PHY API CSIPHYs.
+
+The base is next-20261015 plus David's "media: camss: Add support for
+C-PHY configuration on Qualcomm platforms" v9, which provides phy_cfg,
+the CSID phy_sel and the C-PHY link frequency. I had to port its 8/9 by
+hand onto the PHY API changes:
+https://lore.kernel.org/all/20260617-qcom-cphy-v9-0-83da8a8e4e44@ixit.cz/
+
+Tested on the Surface Pro 11 (X1E80100). Both cameras run together through
+the upstream stack: CSI2 PHY nodes as in Bryan's x1e80100 camera DT v7,
+and CAMSS in PHY API mode, with raw capture over RDI:
+- front IMX681 (Sergey's and Andre's v8 driver plus its C-PHY RFC) on
+  CSIPHY2, one C-PHY trio at 2.4 Gsym/s: 3844x2640 at 30.01 fps, and the
+  sensor's colour bars are byte-identical to the pattern captured with an
+  out-of-tree driver;
+- rear OV13858 on CSIPHY1, four D-PHY lanes: 29.9 fps, as before the
+  series.
+The kernel was 7.1.5, with linux-next's CAMSS and CSI2 PHY built as
+modules; the test build needed shims only for API differences.
+
+Two questions:
+- Is a generic C-PHY mode how you want CAMSS to ask for it, or would you
+  rather the PHY take the mode from its own endpoint alone?
+- Qualcomm's X1E sequence is for 2.5 Gsps, and this sensor runs at
+  2.4 Gsym/s with it. The sa8775p C-PHY series selects settings by data
+  rate. Should X1E do the same?
+
+Patches 1-2 are PHY and 3-4 are CAMSS. They can go separately once the
+approach is agreed.
+
+Thanks,
+George
+
+---
+George Neacsu (4):
+      phy: Add MIPI C-PHY mode and configuration options
+      phy: qcom-mipi-csi2: Add C-PHY support for X1E80100
+      media: qcom: camss: csid-680: Select C-PHY in the receiver
+      media: qcom: camss: Configure C-PHY through the PHY API
+
+ drivers/media/platform/qcom/camss/camss-csid-680.c |   2 +
+ drivers/media/platform/qcom/camss/camss-csiphy.c   |  35 +++--
+ drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c | 151 ++++++++++++++++++++-
+ drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c     |  49 ++++++-
+ drivers/phy/qualcomm/phy-qcom-mipi-csi2.h          |   4 +
+ include/linux/phy/phy-mipi-cphy.h                  |  27 ++++
+ include/linux/phy/phy.h                            |   5 +
+ 7 files changed, 252 insertions(+), 21 deletions(-)
+---
+base-commit: 4a926a0ea6c65089285eb3ccb84ac6b02b22dee5
+change-id: 20261015-x1e-cphy-rfc-201860c8097f
+
+Best regards,
+-- 
+George Neacsu <geocausa@gmail.com>
+
