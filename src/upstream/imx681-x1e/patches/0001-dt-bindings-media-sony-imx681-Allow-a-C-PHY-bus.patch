@@ -1,0 +1,89 @@
+From c0f6c002b33fc4456df12a4e645cf5d33cc74cfa Mon Sep 17 00:00:00 2001
+In-Reply-To: <20261002082537.74084-1-lsa.uz@pm.me>
+References: <20261002082537.74084-1-lsa.uz@pm.me>
+From: geoca <geocausa@gmail.com>
+Date: Thu, 15 Oct 2026 22:05:24 +0100
+Subject: [RFC PATCH 1/2] dt-bindings: media: sony,imx681: Allow a C-PHY bus
+To: Sergey Lebedev <lsa.uz@pm.me>,
+    Andre Gilerson <andre.gilerson@gmail.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+    Mauro Carvalho Chehab <mchehab@kernel.org>,
+    Rob Herring <robh@kernel.org>,
+    Krzysztof Kozlowski <krzk+dt@kernel.org>,
+    Conor Dooley <conor+dt@kernel.org>,
+    Bryan O'Donoghue <bod@kernel.org>,
+    German Pablo Lindo <germanpapulindez@gmail.com>,
+    linux-media@vger.kernel.org,
+    devicetree@vger.kernel.org,
+    linux-arm-msm@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+
+On the Surface Pro 11 with a Snapdragon X Elite, the IMX681 reaches the
+CAMSS CSIPHY over one MIPI C-PHY trio rather than over the two D-PHY
+lanes of the Intel model. Let bus-type select C-PHY, and with it a single
+data lane, keeping two D-PHY lanes as the default.
+
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: geoca <geocausa@gmail.com>
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_016zd5AZNnh8f3jMZGSJKisF
+---
+ .../bindings/media/i2c/sony,imx681.yaml       | 26 +++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx681.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx681.yaml
+index 62e7eae..51256a7 100644
+--- a/Documentation/devicetree/bindings/media/i2c/sony,imx681.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx681.yaml
+@@ -14,8 +14,8 @@ description:
+   The Sony IMX681 is a CMOS active pixel image sensor with a square pixel
+   array, used as the user-facing camera on several Microsoft Surface devices.
+   It operates from analog 2.8 V, digital 1.05 V and interface 1.8 V supplies,
+-  is programmable over I2C, and outputs 10-bit Bayer data over a two-lane
+-  MIPI CSI-2 D-PHY interface.
++  is programmable over I2C, and outputs 10-bit Bayer data over MIPI CSI-2,
++  either on two D-PHY lanes or on one C-PHY trio.
+ 
+ allOf:
+   - $ref: /schemas/media/video-interface-devices.yaml#
+@@ -54,7 +54,14 @@ properties:
+         unevaluatedProperties: false
+ 
+         properties:
++          bus-type:
++            enum:
++              - 1 # MEDIA_BUS_TYPE_CSI2_CPHY
++              - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
++            default: 4
++
+           data-lanes:
++            minItems: 1
+             items:
+               - const: 1
+               - const: 2
+@@ -63,6 +70,21 @@ properties:
+           - data-lanes
+           - link-frequencies
+ 
++        if:
++          properties:
++            bus-type:
++              const: 1
++          required:
++            - bus-type
++        then:
++          properties:
++            data-lanes:
++              maxItems: 1
++        else:
++          properties:
++            data-lanes:
++              minItems: 2
++
+     required:
+       - endpoint
+ 
+-- 
+2.53.0
+
