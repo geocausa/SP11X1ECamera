@@ -47,5 +47,12 @@ checkpatch --strict (mainline script) is clean, except the generic
 "new file, MAINTAINERS?" note. `include/linux/phy/` is covered by GENERIC
 PHY FRAMEWORK.
 
-`patches/*.eml` are the b4 messages (RFC, to Bryan, Vinod and David). Nothing
-has been sent until this README says so.
+## Sent
+
+Sent 2026-10-15 by George Neacsu through the kernel.org b4 web endpoint, as
+"[PATCH RFC 0/4] phy: qcom-mipi-csi2: C-PHY for X1E80100", Message-ID
+`20261015-x1e-cphy-rfc-v1-0-1f3fa9af940a@gmail.com`. It went to Bryan
+O'Donoghue, Vinod Koul and David Heidelberg, with Cc to Neil Armstrong,
+Vladimir Zapolskiy, Loic Poulain, Mauro, Mani, linux-phy, linux-media,
+linux-arm-msm and LKML. The working tree is the b4 branch `x1e-cphy-rfc`
+in `06-camera/linux-next-sparse` on SP11.
