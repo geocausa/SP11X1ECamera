@@ -1,0 +1,39 @@
+From: George Neacsu <geocausa@gmail.com>
+To: Sergey Lebedev <lsa.uz@pm.me>
+Cc: Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+ Peter Marshall <pm@petermarshall.ca>,
+ Sylvain Petinot <sylvain.petinot@foss.st.com>,
+ Jizhou Tong <fqwqf@fqwqf.xyz>, Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: vd55g1: fix VD55G0 streaming below 900 Mbps
+In-Reply-To: <20261016070158.43624-1-lsa.uz@pm.me>
+References: <20261016-vd55g0-sp11-fix-v1-1-eb14bd80d8f8@gmail.com>
+ <20261016070158.43624-1-lsa.uz@pm.me>
+
+Hi Sergey,
+
+On 16/10/2026 08:02, Sergey Lebedev wrote:
+> So here, writing 0 there does not stop the output by itself. vd55g1
+> writes it at every stream start instead, which may be the difference.
+
+Thanks, you are right, and it is not the place either. I retested on the
+Snapdragon model with the line length change applied and 0x0329 handled
+three ways:
+
+  ISL_ENABLE = 0 at every stream start (as in Peter's v2)   6/6 captures
+  ISL_ENABLE = 0 once per power-on, after boot              2/2
+  never written                                              2/2
+
+All at 840 Mbps on one lane, 644x604 Y10, with real images in every run,
+including a stream-start write on the first capture after loading the
+module. 0x0329 reads 0x01 after power-on here too and 0x00 once
+written.
+
+The failure I based the ISL change on came from a debug build where the
+line length was forced by a register write just before stream start
+rather than coming from the driver, so it was not a clean test. I will
+send a v2 with only the line length change.
+
+Thanks,
+George
