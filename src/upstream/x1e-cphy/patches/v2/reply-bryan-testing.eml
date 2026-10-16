@@ -1,0 +1,47 @@
+From: George Neacsu <geocausa@gmail.com>
+To: Bryan O'Donoghue <bod@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>, David Heidelberg <david@ixit.cz>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Nihal Kumar Gupta <nihal.gupta@oss.qualcomm.com>,
+ Vikram Sharma <vikram.sharma@oss.qualcomm.com>,
+ Suresh Vankadara <svankada@qti.qualcomm.com>, tjose@qti.qualcomm.com,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, linux-phy@lists.infradead.org,
+ linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 0/4] phy: qcom-mipi-csi2: C-PHY for X1E80100
+In-Reply-To: <b96649d9-5c1c-4fc0-a77d-d0076cf80b86@kernel.org>
+References: <20261016-x1e-cphy-rfc-v2-0-377654253193@gmail.com>
+ <b96649d9-5c1c-4fc0-a77d-d0076cf80b86@kernel.org>
+
+Hi Bryan,
+
+On 16/10/2026 12:02, Bryan O'Donoghue wrote:
+> Small point of order here - this is not really @ RFC status.
+
+Understood, v3 drops the RFC prefix.
+
+>> The kernel was 7.1.5, with linux-next's CAMSS and CSI2 PHY built as
+>> modules; the test build needed shims only for API differences.
+>
+> What's this ?
+>
+> "It builds" I can verify myself, "it works" is the thing. Just slow down
+> and get something you can test on hardware.
+
+Fair point. The frames in the cover letter were captured on the
+hardware, but the kernel underneath was the 7.1.5 one this machine runs
+day to day, with linux-next's CAMSS and CSI2 PHY sources built as modules
+for it. That is not the same as running linux-next. Before v3 I will
+boot an actual linux-next kernel on the Surface Pro 11, retest both
+cameras there, and say exactly what was run.
+
+For 4/4 I will also move the fsleep() change into its own patch with the
+reasoning, and put the lanes_enable() decomposition in a precursor
+patch, as you asked. Thanks for the reviews of 2/4 and 3/4.
+
+Thanks,
+George

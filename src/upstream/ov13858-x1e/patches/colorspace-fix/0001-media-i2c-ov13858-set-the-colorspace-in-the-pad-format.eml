@@ -1,0 +1,81 @@
+From: George Neacsu <geocausa@gmail.com>
+Date: Fri, 16 Oct 2026 12:25:34 +0100
+Subject: [PATCH] media: i2c: ov13858: Set the colorspace in the pad format
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261016-ov13858-colorspace-v1-1-9858defbc556@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avErBMcLYmuEi1MpxoIFYUIpLsnL
+ d/i/wqFMlOBuauQ6ebCMTRg34E7bThIsG8GJZVBiUbEG/U0TsLFK+aSrCOxoZIDaeul8dDClGn
+ n558u6/t+y7oG+WQAAAA=
+X-Change-ID: 20261016-ov13858-colorspace-b1204e3ad06d
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sergey Lebedev <lsa.uz@pm.me>, linux-media@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792149933; l=2330;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=rgY7k89NsO+vJdnAKgVMiLKbKLGXTu5mpfg6uoMioRc=;
+ b=FXwEO7/tYPzig2O4dJhASjkDOXbg4hPiThQf9Uoav6g/FQ9vvn3QgxqD/e+gHR4PwRMi26Qxg
+ NDOCYNktaiYAUgZFkk7IKTc4kxLRR0nxeAP3xQRkVFXnVOvFJBqavKd
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
+
+ov13858_update_pad_format() and the try format set in open() fill in the
+size, code and field but leave the colorspace fields at zero, so the
+sensor reports V4L2_COLORSPACE_DEFAULT. v4l2-compliance flags that: on
+the Intel Surface Pro 11, Active VIDIOC_SUBDEV_S_FMT fails through the
+media device. Report a raw colorspace, as imx355 and imx219 do.
+
+Tested on the Snapdragon Surface Pro 11: the sensor reports Raw / None /
+601 / full range, streams 4224x3136 at 29.9 fps, and v4l2-compliance
+passes 46 of 46 on the subdev.
+
+Reported-by: Sergey Lebedev <lsa.uz@pm.me>
+Closes: https://lore.kernel.org/all/20261016070018.11932-1-lsa.uz@pm.me/
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+Sergey found this while testing the ov13858 device tree series on the
+Intel Surface Pro 11. It is independent of that series and applies to
+linux-next on its own.
+---
+ drivers/media/i2c/ov13858.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
+index 5a49fa0ec..5be3d0888 100644
+--- a/drivers/media/i2c/ov13858.c
++++ b/drivers/media/i2c/ov13858.c
+@@ -1168,6 +1168,10 @@ static int ov13858_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ 	try_fmt->height = ov13858->cur_mode->height;
+ 	try_fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
+ 	try_fmt->field = V4L2_FIELD_NONE;
++	try_fmt->colorspace = V4L2_COLORSPACE_RAW;
++	try_fmt->ycbcr_enc = V4L2_YCBCR_ENC_601;
++	try_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
++	try_fmt->xfer_func = V4L2_XFER_FUNC_NONE;
+ 
+ 	/* No crop or compose */
+ 	mutex_unlock(&ov13858->mutex);
+@@ -1348,6 +1352,10 @@ static void ov13858_update_pad_format(const struct ov13858_mode *mode,
+ 	fmt->format.height = mode->height;
+ 	fmt->format.code = MEDIA_BUS_FMT_SGRBG10_1X10;
+ 	fmt->format.field = V4L2_FIELD_NONE;
++	fmt->format.colorspace = V4L2_COLORSPACE_RAW;
++	fmt->format.ycbcr_enc = V4L2_YCBCR_ENC_601;
++	fmt->format.quantization = V4L2_QUANTIZATION_FULL_RANGE;
++	fmt->format.xfer_func = V4L2_XFER_FUNC_NONE;
+ }
+ 
+ static int ov13858_do_get_pad_format(struct ov13858 *ov13858,
+
+---
+base-commit: b810335a0699d1810683796b0e3ffe8827ddfe6c
+change-id: 20261016-ov13858-colorspace-b1204e3ad06d
+
+Best regards,
+-- 
+George Neacsu <geocausa@gmail.com>
+
