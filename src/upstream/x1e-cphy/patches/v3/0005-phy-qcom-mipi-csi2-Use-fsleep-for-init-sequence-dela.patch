@@ -1,0 +1,39 @@
+From f9b5543aa019f71bcb20b8c85e7e36e0878efe9b Mon Sep 17 00:00:00 2001
+From: George Neacsu <geocausa@gmail.com>
+Date: Fri, 16 Oct 2026 12:37:56 +0100
+Subject: [PATCH 5/6] phy: qcom-mipi-csi2: Use fsleep() for init sequence
+ delays
+
+The init sequence delays are applied with udelay(), which busy-waits.
+That is fine for the 1 us delays in the current D-PHY sequence, but the
+X1E80100 C-PHY sequence added next waits about 3 ms after its reset
+exit, and busy-waiting that long is wasteful. The sequence is written
+from phy_power_on(), in process context, where sleeping is allowed; the
+PHY reset just before it already uses usleep_range().
+
+Switch to fsleep(). It still uses udelay() for delays of 10 us or less,
+so the existing D-PHY sequence behaves as before.
+
+Suggested-by: Nihal Kumar Gupta <nihal.gupta@oss.qualcomm.com>
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
+index a44e104301..84c45f67fd 100644
+--- a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
++++ b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
+@@ -264,7 +264,7 @@ phy_qcom_mipi_csi2_gen2_config_lanes(struct mipi_csi2phy_device *csi2phy,
+ 		}
+ 		writel(val, csi2phy->base + r->reg_addr);
+ 		if (r->delay_us)
+-			udelay(r->delay_us);
++			fsleep(r->delay_us);
+ 	}
+ }
+ 
+-- 
+2.53.0
+

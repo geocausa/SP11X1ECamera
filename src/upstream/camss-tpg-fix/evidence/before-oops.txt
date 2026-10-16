@@ -1,0 +1,52 @@
+[  256.030571] msm_tpg0: =================  START STATUS  =================
+[  256.030572] msm_tpg0: ==================  END STATUS  ==================
+[  256.030712] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[  256.030715] Mem abort info:
+[  256.030716]   ESR = 0x0000000096000004
+[  256.030717]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  256.030718]   SET = 0, FnV = 0
+[  256.030719]   EA = 0, S1PTW = 0
+[  256.030720]   FSC = 0x04: level 0 translation fault
+[  256.030722] Data abort info:
+[  256.030722]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+[  256.030723]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[  256.030724]   GCS = 0, Overlay = 0, DirtyBit = 0
+[  256.030725] user pgtable: 4k pages, 48-bit VAs, pgdp=000000098a764000
+[  256.030727] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+[  256.030731] Internal error: Oops: 0000000096000004 [#1]  SMP
+[  256.030734] Modules linked in: qcom_camss phy_qcom_mipi_csi2 imx681 ov13858 v4l2_cci videobuf2_dma_sg videobuf2_v4l2 videobuf2_memops videobuf2_common v4l2_fwnode v4l2_async videodev mc aes_ce_ccm rfcomm algif_hash algif_skcipher af_alg reset_gpio snd_soc_wsa884x gpio_shared_proxy q6prm_clocks q6apm_lpass_dais q6apm_dai snd_q6dsp_common q6prm snd_seq_dummy snd_hrtimer snd_seq snd_seq_device bnep qrtr_mhi binfmt_misc ath12k_wifi7 ath12k mhi mac80211 hci_uart btqca btrtl libarc4 btbcm nls_iso8859_1 snd_soc_x1e80100 btintel snd_soc_qcom_common cfg80211 aes_ce_blk ghash_ce gf128mul sm4_ce_gcm sm4_ce_ccm sm4_ce sm4_ce_cipher sm4 surface_aggregator_tabletsw surface_aggregator_hub bluetooth qcom_spmi_temp_alarm pm8941_pwrkey industrialio snd_q6apm snd_soc_hdmi_codec snd_soc_qcom_sdw fastrpc qcom_edac pci_pwrctrl_pwrseq sch_fq_codel nvme_fabrics efi_pstore dmi_sysfs autofs4 snd_soc_wcd938x snd_soc_wcd_classh snd_soc_wcd938x_sdw regmap_sdw snd_soc_wcd_common nvme snd_soc_wcd_mbhc nvme_core snd_soc_lpass_tx_macro nvme_keyring
+[  256.030788]  nvme_auth apr qrtr_smd rpmsg_ctrl panel_samsung_atna33xc20 snd_soc_lpass_rx_macro surface_battery surface_charger surface_aggregator_registry qcom_pd_mapper surface_aggregator qcom_pon reboot_mode nvmem_qcom_spmi_sdam rtc_pm8xxx ps883x crc_itu_t soundwire_qcom msm slimbus snd_soc_lpass_wsa_macro snd_soc_lpass_va_macro soundwire_bus snd_soc_lpass_macro_common qcom_spmi_pmic snd_soc_core i2c_qcom_geni qcom_stats qcom_q6v5_pas snd_compress qcom_pil_info ubwc_config qmi_tmd ocmem qcom_common snd_pcm drm_gpuvm qcom_glink_smem qcom_geni_serial qcom_q6v5 pinctrl_sm8550_lpass_lpi gpi dispcc_x1e80100 qcom_sysmon lpasscc_sc8280xp phy_qcom_edp spi_geni_qcom pinctrl_lpass_lpi drm_exec i2c_qcom_cci snd_timer videocc_sm8550 snd gpucc_x1e80100 gpu_sched sbsa_gwdt mdt_loader icc_bwmon soundcore tcsrcc_x1e80100 qcom_cpucp_mbox ucsi_glink typec_ucsi userspace_consumer socinfo fixed pwrseq_qcom_wcn gpio_keys arm_smccc_trng qrtr [last unloaded: phy_qcom_mipi_csi2]
+[  256.030840] CPU: 5 UID: 0 PID: 17502 Comm: v4l2-compliance Not tainted 7.3.0-rc7-next-20261015-sp11-next-cphy+ #1 PREEMPT(full) 
+[  256.030843] Hardware name: Microsoft Corporation Microsoft Surface Pro, 11th Edition/Microsoft Surface Pro, 11th Edition, BIOS 175.222.235 02/23/2026
+[  256.030844] pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[  256.030846] pc : v4l2_ctrl_type_op_validate+0x40c/0x1b80 [videodev]
+[  256.030855] lr : set_ctrl+0x84/0x120 [videodev]
+[  256.030861] sp : ffff80008aefb790
+[  256.030862] x29: ffff80008aefb790 x28: 0000000000000000 x27: 0000000000000000
+[  256.030864] x26: 0000000000000008 x25: 00000000c008561c x24: 0000000000000000
+[  256.030867] x23: ffff000815d9c3c0 x22: 0000000000000000 x21: ffff000804abbec4
+[  256.030869] x20: 0000000000000000 x19: ffff000804abbe00 x18: 0000000000000000
+[  256.030871] x17: 0000000000000000 x16: 0000000000000000 x15: 0000ffffed9b4c60
+[  256.030874] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+[  256.030876] x11: 0000000000000000 x10: 0000000000000000 x9 : ffffad39317cf8bc
+[  256.030878] x8 : ffff80008aefba48 x7 : 0000000000000000 x6 : 0000000000000000
+[  256.030880] x5 : 0000000000000000 x4 : 0000000000000009 x3 : 0000000000000000
+[  256.030882] x2 : 0000000000000000 x1 : 0000000000000003 x0 : 0000000000000000
+[  256.030885] Call trace:
+[  256.030886]  v4l2_ctrl_type_op_validate+0x40c/0x1b80 [videodev] (P)
+[  256.030892]  set_ctrl+0x84/0x120 [videodev]
+[  256.030898]  v4l2_s_ctrl+0xfc/0x140 [videodev]
+[  256.030903]  subdev_do_ioctl+0x540/0xce8 [videodev]
+[  256.030909]  subdev_do_ioctl_lock+0x1b0/0x220 [videodev]
+[  256.030914]  video_usercopy+0x304/0x838 [videodev]
+[  256.030919]  subdev_ioctl+0x20/0x48 [videodev]
+[  256.030924]  v4l2_ioctl+0x64/0xc8 [videodev]
+[  256.030929]  __arm64_sys_ioctl+0xc0/0x140
+[  256.030934]  invoke_syscall.constprop.0+0x9c/0x120
+[  256.030937]  el0_svc_common.constprop.0+0x40/0x130
+[  256.030939]  do_el0_svc+0x24/0x50
+[  256.030941]  el0_svc+0x44/0x2e8
+[  256.030944]  el0t_64_sync_handler+0xb8/0x100
+[  256.030947]  el0t_64_sync+0x1b0/0x1b8
+[  256.030949] Code: 54ffe4e1 f9405260 b8a36aa1 f8617800 (39400000) 
+[  256.030952] ---[ end trace 0000000000000000 ]---

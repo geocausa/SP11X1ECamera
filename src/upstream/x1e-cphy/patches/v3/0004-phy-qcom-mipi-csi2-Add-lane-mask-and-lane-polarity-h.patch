@@ -1,0 +1,114 @@
+From b8bde1515dc13bffaf1cd76a86184bc7876e0052 Mon Sep 17 00:00:00 2001
+From: George Neacsu <geocausa@gmail.com>
+Date: Fri, 16 Oct 2026 12:37:56 +0100
+Subject: [PATCH 4/6] phy: qcom-mipi-csi2: Add lane mask and lane polarity
+ helpers
+
+Move the CTRL5 lane mask and the CTRL9 lane polarity writes out of
+phy_qcom_mipi_csi2_lanes_enable() into two helpers,
+phy_qcom_mipi_csi2_lane_mask() and
+phy_qcom_mipi_csi2_dphy_lane_polarities(). A C-PHY path needs a
+different lane mask and no polarities, and with the helpers it can be
+added without a goto or a second copy of the common setup.
+
+No functional change.
+
+Suggested-by: Bryan O'Donoghue <bod@kernel.org>
+Suggested-by: Nihal Kumar Gupta <nihal.gupta@oss.qualcomm.com>
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ .../qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c    | 64 ++++++++++++-------
+ 1 file changed, 42 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
+index b2d4ec3e81..a44e104301 100644
+--- a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
++++ b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
+@@ -268,34 +268,32 @@ phy_qcom_mipi_csi2_gen2_config_lanes(struct mipi_csi2phy_device *csi2phy,
+ 	}
+ }
+ 
+-static int phy_qcom_mipi_csi2_lanes_enable(struct mipi_csi2phy_device *csi2phy,
+-					   struct mipi_csi2phy_stream_cfg *cfg)
++/*
++ * CSI_COMMON_CTRL5 is a physical lane power-up bitmap:
++ * - Bits [0,2,4,6] → D-PHY data lanes(LN0, LN2, LN4, LN6)
++ * - Bits [1,3,5] → C-PHY trio lanes(LN1, LN3, LN5)
++ * - Bit [7] → D-PHY clock lane(LNCK) dedicated clock enable
++ */
++static u8 phy_qcom_mipi_csi2_lane_mask(struct mipi_csi2phy_device *csi2phy,
++				       struct mipi_csi2phy_stream_cfg *cfg)
+ {
+-	const struct mipi_csi2phy_device_regs *regs = csi2phy_dev_to_regs(csi2phy);
+ 	struct mipi_csi2phy_lanes_cfg *lane_cfg = &cfg->lane_cfg;
+-	u8 settle_cnt;
+-	u8 val;
++	u8 lane_mask;
+ 	int i;
+ 
+-	if (cfg->link_freq <= 0)
+-		return -EINVAL;
+-
+-	settle_cnt = phy_qcom_mipi_csi2_settle_cnt_calc(cfg->link_freq, csi2phy->timer_clk_rate);
+-	if (!settle_cnt)
+-		return -ENODEV;
+-
+-	/*
+-	 * CSI_COMMON_CTRL5 is a physical lane power-up bitmap:
+-	 * - Bits [0,2,4,6] → D-PHY data lanes(LN0, LN2, LN4, LN6)
+-	 * - Bits [1,3,5] → C-PHY trio lanes(LN1, LN3, LN5)
+-	 * - Bit [7] → D-PHY clock lane(LNCK) dedicated clock enable
+-	 */
+-	val = BIT(lane_cfg->clk.pos);
++	lane_mask = BIT(lane_cfg->clk.pos);
+ 	for (i = 0; i < cfg->num_data_lanes; i++)
+-		val |= BIT(lane_cfg->data[i].pos * 2);
++		lane_mask |= BIT(lane_cfg->data[i].pos * 2);
+ 
+-	writel(val, csi2phy->base +
+-	       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->common_regs_offset, 5));
++	return lane_mask;
++}
++
++static void
++phy_qcom_mipi_csi2_dphy_lane_polarities(struct mipi_csi2phy_device *csi2phy,
++					struct mipi_csi2phy_stream_cfg *cfg)
++{
++	struct mipi_csi2phy_lanes_cfg *lane_cfg = &cfg->lane_cfg;
++	int i;
+ 
+ 	/* Lane configuration for polarity @ CSIPHY-base + CTRL9 */
+ 	for (i = 0; i < cfg->num_data_lanes; i++) {
+@@ -308,6 +306,28 @@ static int phy_qcom_mipi_csi2_lanes_enable(struct mipi_csi2phy_device *csi2phy,
+ 
+ 	if (lane_cfg->clk.pol)
+ 		writel(BIT(2), csi2phy->base + CSIPHY_2PH_LN_CSI_2PHASE_CTRL9n(lane_cfg->clk.pos));
++}
++
++static int phy_qcom_mipi_csi2_lanes_enable(struct mipi_csi2phy_device *csi2phy,
++					   struct mipi_csi2phy_stream_cfg *cfg)
++{
++	const struct mipi_csi2phy_device_regs *regs = csi2phy_dev_to_regs(csi2phy);
++	u8 settle_cnt;
++	u8 val;
++	int i;
++
++	if (cfg->link_freq <= 0)
++		return -EINVAL;
++
++	settle_cnt = phy_qcom_mipi_csi2_settle_cnt_calc(cfg->link_freq, csi2phy->timer_clk_rate);
++	if (!settle_cnt)
++		return -ENODEV;
++
++	val = phy_qcom_mipi_csi2_lane_mask(csi2phy, cfg);
++	writel(val, csi2phy->base +
++	       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->common_regs_offset, 5));
++
++	phy_qcom_mipi_csi2_dphy_lane_polarities(csi2phy, cfg);
+ 
+ 	val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_COMMON_PWRDN_B;
+ 	writel(val, csi2phy->base +
+-- 
+2.53.0
+

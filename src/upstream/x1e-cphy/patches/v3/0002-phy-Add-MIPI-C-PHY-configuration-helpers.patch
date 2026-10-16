@@ -1,0 +1,109 @@
+From a65fff59b2ab3ec010dec8cb671dad55d885effc Mon Sep 17 00:00:00 2001
+From: George Neacsu <geocausa@gmail.com>
+Date: Fri, 16 Oct 2026 12:37:32 +0100
+Subject: [PATCH 2/6] phy: Add MIPI C-PHY configuration helpers
+
+A CSI-2 receiver knows the link frequency of its transmitter, and by the
+V4L2 convention a C-PHY link frequency is half the symbol rate on each
+trio. Add helpers so that the receiver and the PHY do not each open-code
+that conversion, as phy_mipi_dphy_get_default_config_for_hsclk() does
+for D-PHY:
+
+- phy_mipi_cphy_get_default_config_for_link_freq() fills a
+  configuration from a link frequency and a trio count;
+- phy_mipi_cphy_config_validate() checks for a symbol rate and one to
+  three trios;
+- phy_mipi_cphy_link_freq() gives the link frequency of a configuration.
+
+They are small enough to be inline, so no new Kconfig symbol is needed.
+
+Suggested-by: Bryan O'Donoghue <bod@kernel.org>
+Suggested-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ include/linux/phy/phy-mipi-cphy.h | 60 +++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+
+diff --git a/include/linux/phy/phy-mipi-cphy.h b/include/linux/phy/phy-mipi-cphy.h
+index 9b748d577b..adc2dcbd2e 100644
+--- a/include/linux/phy/phy-mipi-cphy.h
++++ b/include/linux/phy/phy-mipi-cphy.h
+@@ -2,8 +2,11 @@
+ #ifndef __PHY_MIPI_CPHY_H_
+ #define __PHY_MIPI_CPHY_H_
+ 
++#include <linux/errno.h>
+ #include <linux/types.h>
+ 
++#define PHY_MIPI_CPHY_MAX_TRIOS		3
++
+ /**
+  * struct phy_configure_opts_mipi_cphy - MIPI C-PHY configuration set
+  *
+@@ -26,4 +29,61 @@ struct phy_configure_opts_mipi_cphy {
+ 	u8			trios;
+ };
+ 
++/**
++ * phy_mipi_cphy_config_validate() - Validate a MIPI C-PHY configuration
++ * @cfg: configuration to check
++ *
++ * Return: 0 if @cfg has a symbol rate and one to three trios, -EINVAL
++ * otherwise.
++ */
++static inline int
++phy_mipi_cphy_config_validate(const struct phy_configure_opts_mipi_cphy *cfg)
++{
++	if (!cfg->symbol_rate)
++		return -EINVAL;
++
++	if (cfg->trios < 1 || cfg->trios > PHY_MIPI_CPHY_MAX_TRIOS)
++		return -EINVAL;
++
++	return 0;
++}
++
++/**
++ * phy_mipi_cphy_get_default_config_for_link_freq() - C-PHY configuration
++ * from a link frequency
++ * @link_freq: link frequency in Hz
++ * @trios: number of active trios
++ * @cfg: configuration to fill
++ *
++ * A C-PHY link frequency is half the symbol rate on each trio, the
++ * convention V4L2 uses for the link frequency of a C-PHY transmitter.
++ *
++ * Return: 0 on success, -EINVAL if the resulting configuration is invalid.
++ */
++static inline int
++phy_mipi_cphy_get_default_config_for_link_freq(u64 link_freq,
++					       unsigned int trios,
++					       struct phy_configure_opts_mipi_cphy *cfg)
++{
++	if (trios > PHY_MIPI_CPHY_MAX_TRIOS)
++		return -EINVAL;
++
++	cfg->symbol_rate = link_freq * 2;
++	cfg->trios = trios;
++
++	return phy_mipi_cphy_config_validate(cfg);
++}
++
++/**
++ * phy_mipi_cphy_link_freq() - Link frequency of a MIPI C-PHY configuration
++ * @cfg: configuration
++ *
++ * Return: the link frequency in Hz, half the symbol rate on each trio.
++ */
++static inline u64
++phy_mipi_cphy_link_freq(const struct phy_configure_opts_mipi_cphy *cfg)
++{
++	return cfg->symbol_rate / 2;
++}
++
+ #endif /* __PHY_MIPI_CPHY_H_ */
+-- 
+2.53.0
+

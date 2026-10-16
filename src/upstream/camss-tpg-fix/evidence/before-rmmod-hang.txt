@@ -1,0 +1,23 @@
+rmmod: ERROR: Module imx681 is in use
+rmmod: ERROR: Module ov13858 is in use
+  18369 D    rmmod qcom_camss
+[<0>] v4l2_ctrl_handler_free+0x40/0x1f8 [videodev]
+[<0>] msm_tpg_unregister_entity+0x2c/0x50 [qcom_camss]
+[<0>] camss_unregister_entities+0xa8/0x1a0 [qcom_camss]
+[<0>] camss_remove+0x34/0x98 [qcom_camss]
+[<0>] platform_remove+0x28/0x60
+[<0>] device_remove+0x54/0xb0
+[<0>] device_release_driver_internal+0x210/0x2f0
+[<0>] driver_detach+0x54/0xd0
+[<0>] bus_remove_driver+0x7c/0x138
+[<0>] driver_unregister+0x38/0x90
+[<0>] platform_driver_unregister+0x1c/0x40
+[<0>] qcom_camss_driver_exit+0x18/0xa10 [qcom_camss]
+[<0>] __arm64_sys_delete_module+0x1c4/0x368
+[<0>] invoke_syscall.constprop.0+0x9c/0x120
+[<0>] el0_svc_common.constprop.0+0x40/0x130
+[<0>] do_el0_svc+0x24/0x50
+[<0>] el0_svc+0x44/0x2e8
+[<0>] el0t_64_sync_handler+0xb8/0x100
+[<0>] el0t_64_sync+0x1b0/0x1b8
+done
