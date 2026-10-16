@@ -42,3 +42,21 @@ from ST's downstream code. The patch is mainly a data point for whichever driver
 
 The Windows-derived 552-byte patch was used only for the comparison test. It is not
 included here.
+
+## IR illuminator (16 Oct 2026)
+
+The IR LED is PM8550 flash channels 1+4 (SID 1, 0xee00) in hardware strobe from sensor GPIO1, matching
+the Windows PMIC trace (ee46=80, ee4e=09, ee4a/ee4d=05, ee67 bit 0 cleared). First lit frame:
+`evidence/ir-lit-first-frame.png` (dark room, 1 ms pulses, 100 mA per channel, analogue gain 16).
+
+What was needed on top of Peter's driver and mainline leds-qcom-flash (`illuminator/`):
+- sensor: `v4l2_async_register_subdev_sensor()` so the `flash-leds` link binds the flash subdev;
+- leds-qcom-flash: our external-strobe safety patches (current/timeout before arming, etc.), plus
+  clearing ee67 bit 0 while hardware-armed as Windows does (without it the LED never fires);
+- leds-qcom-flash remove/probe-error loops never release the V4L2 flash device (off-by-one, still in
+  mainline/linux-next 2026-10-15): rmmod leaves a registered subdev on freed memory and the next
+  control access oopses (`evidence/crash-20261016/`). Fixed by `flash-remove-fix.py`.
+- the v4l2-flash core resets the strobe source on close, so `flash-hold.py` arms only while it holds
+  the subdev open and disarms on exit or signal.
+
+Safety limits used: DT caps 200 mA total and 10 ms per pulse; manual exposure ~1 ms (~6% duty).
