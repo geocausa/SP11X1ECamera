@@ -1,0 +1,90 @@
+From: George Neacsu <geocausa@gmail.com>
+Date: Fri, 16 Oct 2026 07:35:27 +0100
+Subject: [PATCH] leds: flash: leds-qcom-flash: Release all V4L2 flash
+ devices
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261016-qcom-flash-v4l2-release-v1-1-2fe020f40a79@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MTQqAIBBA4avErBtQKaOuEi1EpxywPwciiO6et
+ PwW7z0glJkEhuqBTBcL71uBrivw0W0LIYdiMMpYrbTF0+8rzslJxKtJBjMlckLYB9X6vgvaNx2
+ U+sg08/2fx+l9Pwh7F4ppAAAA
+X-Change-ID: 20261016-qcom-flash-v4l2-release-9d05c97d1c47
+To: Pavel Machek <pavel@kernel.org>, Lee Jones <lee@kernel.org>
+Cc: linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, stable@vger.kernel.org, 
+ George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792132526; l=2721;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=CI6yYCRJ7s3Nt//a396V+HzvBRozRkOc2yI+sV9seYA=;
+ b=MvnxKIM64aMhJ+68nDYbbZEnhBVRnGqtOTCnDkVaZnHYSZ9yfv/mPiE7ATF7T6GX4SRgLkI3z
+ B5nMp0TyJ1qDFb+NOG0Ure8CaIDiOaKkOpisiGOicUeFXdJVX8bVQQ3
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
+
+The probe error path and qcom_flash_led_remove() walk the V4L2 flash
+array like this:
+
+	while (flash_data->v4l2_flash[flash_data->leds_count] && flash_data->leds_count)
+		v4l2_flash_release(flash_data->v4l2_flash[flash_data->leds_count--]);
+
+leds_count is the number of registered LEDs, so the first test reads
+one entry past the last registered one. The array holds exactly one
+entry per LED child node, so after a full probe that read is out of
+bounds. The loop also stops before index 0. With a single LED nothing
+is released at all.
+
+The V4L2 flash sub-device then stays registered after the driver is
+unbound, still pointing at the driver's freed devm memory. On a Surface
+Pro 11 (X1E80100, PM8550 flash, IR LED linked to a sensor through
+flash-leds), unloading the module and then setting a flash control on
+the sub-device triggered UBSAN shift-out-of-bounds reports and a NULL
+pointer dereference in regmap_field_update_bits_base(), called from
+update_allowed_flash_current().
+
+Release the registered entries from leds_count - 1 down to 0.
+
+Fixes: 96a2e242a5dc ("leds: flash: Add driver to support flash LED module in QCOM PMICs")
+Cc: stable@vger.kernel.org
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ drivers/leds/flash/leds-qcom-flash.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/leds/flash/leds-qcom-flash.c b/drivers/leds/flash/leds-qcom-flash.c
+index b03a683..c2fefee 100644
+--- a/drivers/leds/flash/leds-qcom-flash.c
++++ b/drivers/leds/flash/leds-qcom-flash.c
+@@ -953,8 +953,8 @@ static int qcom_flash_led_probe(struct platform_device *pdev)
+ 
+ 	return regmap_field_write(flash_data->r_fields[REG_TORCH_CLAMP], flash_data->torch_clamp);
+ release:
+-	while (flash_data->v4l2_flash[flash_data->leds_count] && flash_data->leds_count)
+-		v4l2_flash_release(flash_data->v4l2_flash[flash_data->leds_count--]);
++	while (flash_data->leds_count)
++		v4l2_flash_release(flash_data->v4l2_flash[--flash_data->leds_count]);
+ 	return rc;
+ }
+ 
+@@ -962,8 +962,8 @@ static void qcom_flash_led_remove(struct platform_device *pdev)
+ {
+ 	struct qcom_flash_data *flash_data = platform_get_drvdata(pdev);
+ 
+-	while (flash_data->v4l2_flash[flash_data->leds_count] && flash_data->leds_count)
+-		v4l2_flash_release(flash_data->v4l2_flash[flash_data->leds_count--]);
++	while (flash_data->leds_count)
++		v4l2_flash_release(flash_data->v4l2_flash[--flash_data->leds_count]);
+ 
+ 	mutex_destroy(&flash_data->lock);
+ }
+
+---
+base-commit: 62f482ff73bf3ae88b0c899115527752cf9cbf13
+change-id: 20261016-qcom-flash-v4l2-release-9d05c97d1c47
+
+Best regards,
+-- 
+George Neacsu <geocausa@gmail.com>
+

@@ -1,0 +1,68 @@
+From: George Neacsu <geocausa@gmail.com>
+Date: Fri, 16 Oct 2026 07:36:00 +0100
+Subject: [PATCH] media: i2c: vd55g1: Register as a sensor sub-device
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261016-vd55g1-async-sensor-v1-1-b6ae70df49fa@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avErBtQQ6muEi20ppqNhgNSRHdPW
+ r7F/w8IZSaBsXkgU2HhFCt028By+LgT8loNRhmnlXZYVmt3jV7uuKBQlJTRBlJD71Toeg+1PDN
+ tfP3XaX7fD9Hg0oBlAAAA
+X-Change-ID: 20261016-vd55g1-async-sensor-5be09860b38a
+To: Sylvain Petinot <sylvain.petinot@foss.st.com>, 
+ Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+Cc: linux-media@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ linux-kernel@vger.kernel.org, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Peter Marshall <pm@petermarshall.ca>, George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792132559; l=1573;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=HOuIUiiGtrzICJ6LB+4q4TGvU5naELrGEK4lImy36vw=;
+ b=x1lJtG7gFuavl0Flno8fnG33RA+BmU//OemzLcmAsG3iPAde1rNCW2VxiMUbahZTWTFMPVvdW
+ yh0cdDVsR96COF6D7ZJcmD4ZitLhhni3M0h1XrGnqAfxZ1cV6xvIbo1
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
+
+The binding references video-interface-devices.yaml, so a board can
+link the sensor to its illuminator with flash-leds. The driver
+registers with v4l2_async_register_subdev(), which does not parse that
+property, so the flash sub-device is never bound and never appears in
+the media graph.
+
+Use v4l2_async_register_subdev_sensor(), which also handles flash-leds
+and lens-focus. v4l2_async_unregister_subdev() already cleans up the
+sub-notifier it creates.
+
+Tested on a Surface Pro 11 (X1E80100), whose VD55G0 IR sensor (with
+Peter Marshall's VD55G0 support applied) drives the PM8550 flash LED
+in hardware strobe mode: with this change the leds-qcom-flash V4L2
+flash sub-device binds and the IR LED can be armed from userspace.
+
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ drivers/media/i2c/vd55g1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/i2c/vd55g1.c b/drivers/media/i2c/vd55g1.c
+index 6f458f6..8e050b4 100644
+--- a/drivers/media/i2c/vd55g1.c
++++ b/drivers/media/i2c/vd55g1.c
+@@ -2043,7 +2043,7 @@ static int vd55g1_probe(struct i2c_client *client)
+ 		goto err_power_off;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev(&sensor->sd);
++	ret = v4l2_async_register_subdev_sensor(&sensor->sd);
+ 	if (ret) {
+ 		dev_err(dev, "async subdev register failed %d\n", ret);
+ 		goto err_subdev;
+
+---
+base-commit: 62f482ff73bf3ae88b0c899115527752cf9cbf13
+change-id: 20261016-vd55g1-async-sensor-5be09860b38a
+
+Best regards,
+-- 
+George Neacsu <geocausa@gmail.com>
+
