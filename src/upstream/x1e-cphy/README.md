@@ -57,7 +57,7 @@ Vladimir Zapolskiy, Loic Poulain, Mauro, Mani, linux-phy, linux-media,
 linux-arm-msm and LKML. The working tree is the b4 branch `x1e-cphy-rfc`
 in `06-camera/linux-next-sparse` on SP11.
 
-## v2 (16 Oct 2026, draft, not sent)
+## v2 (sent 16 Oct 2026)
 
 Bryan asked for a base that applies to linux-next (phy-next after -rc7). Plain
 linux-next has no C-PHY in CAMSS at all (that is David Heidelberg's v9), so v2
