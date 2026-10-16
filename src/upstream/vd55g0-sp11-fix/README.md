@@ -60,3 +60,13 @@ What was needed on top of Peter's driver and mainline leds-qcom-flash (`illumina
   the subdev open and disarms on exit or signal.
 
 Safety limits used: DT caps 200 mA total and 10 ms per pulse; manual exposure ~1 ms (~6% duty).
+
+### IR LED current: matches Windows exactly
+
+Static read of the Windows PMIC driver's flash target-current callback: it accepts 5-1500 mA per
+logical LED, converts to target steps (`I*1000/step - 1`), and for a paired LED writes **half** of
+that step count (`>>1`) to each of the two channels. Windows' 700 mA request for the IR LED therefore
+lands as 0x1b on both paired channels = 350 mA each, 700 mA total - byte-identical to what our
+lab setting (flash intensity 700000 uA) writes to ee42/ee45. Pulse width also matches (Windows
+sensor setup: manual exposure 100 lines, ~0.86 ms). A warm reboot from Windows clears the
+registers, so the value cannot be read back after the fact.
