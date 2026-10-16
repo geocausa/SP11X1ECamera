@@ -14,13 +14,30 @@ patch file, the OIF_CTRL write, the ISL write, and extra register writes.
 | as posted (line 1128, writes 0x0329=0) | no frames, stop hangs |
 | OIF_CTRL forced to ST's one-lane value 0x81 | no frames |
 | Windows 552-byte patch instead of ST 2.11 | no frames |
-| line 1200, 0x0329 still written to 0 | no frames |
+| line 1200, 0x0329 still written to 0 | no frames (one run; see correction below) |
 | line 1128, 0x0329 not written | no frames |
 | **line 1200, 0x0329 not written** | **frames, 61.6 fps, test pattern correct, clean stop** |
 
 The sensor patch makes no difference: ST 2.11 and the Windows patch behave the same.
 ST's reference vd55g0 driver already uses a 1200-pixel line below 900 Mbps and never
 writes 0x0329.
+
+### Correction (16 Oct 2026): 0x0329 is harmless, only the line length matters
+
+Sergey Lebedev reported that on the Intel SP11 his driver writes ISL_ENABLE=0 once per
+power-on and streams fine. Retest on the sp11-imx681-lab boot with the line-length fix
+in the driver and 0x0329 handled three ways (`lab/vd-isl.py`, `lab/isl-test.sh`):
+
+| 0x0329 handling (line 1200, 840 Mbps, 644x604 Y10) | Captures |
+|---|---|
+| written 0 at every stream start (Peter's v2) | 6/6, incl. first capture after load; test pattern correct |
+| written 0 once per power-on, after boot | 2/2 |
+| never written | 2/2 |
+
+The exact v2 tree (line length only, Peter's ISL write kept) also streams 4/4 with a
+correct diagonal test pattern. The earlier "no frames" row came from a debug build where
+the line length was forced by a late register write, not by the driver. v2 of the patch
+drops the ISL change.
 
 ## Patch
 
