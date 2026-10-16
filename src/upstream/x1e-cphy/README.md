@@ -59,12 +59,18 @@ in `06-camera/linux-next-sparse` on SP11.
 
 ## v2 (16 Oct 2026, draft, not sent)
 
-`patches/v2/` is RFC v2, six patches, with the review from Bryan, Loic and Nihal
-addressed (changelog in the cover letter). New: C-PHY helpers in the PHY layer,
-a D-PHY init-sequence rename, the settle count computed instead of fixed,
-lanes_enable() split into helpers, no separate bus_type.
+Bryan asked for a base that applies to linux-next (phy-next after -rc7). Plain
+linux-next has no C-PHY in CAMSS at all (that is David Heidelberg's v9), so v2
+is the PHY side only: `patches/v2/`, RFC v2 0/4 on next-20261015, which
+applies there on its own. The two CAMSS patches are kept in `patches/v2-camss/`
+to send on top of David's series. Review from Bryan, Loic, Nihal and Konrad is
+addressed (changelog in the cover letter): C-PHY helpers in the PHY layer, a
+D-PHY init-sequence rename, the settle count computed instead of fixed,
+lanes_enable() split into helpers, no separate bus_type, the C-PHY table
+renamed lane_regs_v2_1_2_cphy.
 
-Tested on the sp11-next-lab boot (`lab/build-next2.sh`, `lab/next2-tests.sh`):
+Tested on the sp11-next-lab boot with David's v9 and the CAMSS patches on top
+(`lab/build-next2.sh`, `lab/next2-tests.sh`):
 
 - front IMX681, C-PHY: 3844x2640 at 30 fps, colour bars byte-identical to the
   v1 capture (md5 8c1d6d97...); timer 400 MHz, computed settle count 28;
@@ -72,5 +78,4 @@ Tested on the sp11-next-lab boot (`lab/build-next2.sh`, `lab/next2-tests.sh`):
   64 gives none;
 - rear OV13858, D-PHY: 29.9 fps, settle count 18 as before.
 
-Every commit builds on its own. Patches 1-4 apply to next-20261015 alone; 5-6
-need David Heidelberg's CAMSS C-PHY v9.
+Every commit builds on its own.
