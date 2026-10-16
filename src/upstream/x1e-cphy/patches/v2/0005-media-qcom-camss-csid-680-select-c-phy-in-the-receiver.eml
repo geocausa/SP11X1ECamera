@@ -1,0 +1,69 @@
+From: George Neacsu <geocausa@gmail.com>
+Date: Fri, 16 Oct 2026 11:51:35 +0100
+Subject: [PATCH RFC v2 5/6] media: qcom: camss: csid-680: Select C-PHY in
+ the receiver
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261016-x1e-cphy-rfc-v2-5-5e6a49f5c3c5@gmail.com>
+References: <20261016-x1e-cphy-rfc-v2-0-5e6a49f5c3c5@gmail.com>
+In-Reply-To: <20261016-x1e-cphy-rfc-v2-0-5e6a49f5c3c5@gmail.com>
+To: Bryan O'Donoghue <bod@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ David Heidelberg <david@ixit.cz>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, 
+ Nihal Kumar Gupta <nihal.gupta@oss.qualcomm.com>, 
+ Vikram Sharma <vikram.sharma@oss.qualcomm.com>, 
+ Suresh Vankadara <svankada@qti.qualcomm.com>, tjose@qti.qualcomm.com, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, linux-phy@lists.infradead.org, 
+ linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792147891; l=1414;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=sPLHOQaBQqQefQmWVr+xVoMr9uvRaABBlC2xHxXMB4Q=;
+ b=lcwWcsjOJy7UHStvDIaV6h9XvUeQ26H3AncPElSNhO6UQz7HQMx4xhuAm0yctmn56ReWev1NC
+ B7UEDVAx9zNBfJxpgrVMIRHfaaf19P1v5NwgK7iYOEwaRqWrd+bYOpg
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
+
+CSID 680 has a PHY type select in CSI2_RX_CFG0, next to the PHY number.
+The field is defined but never written, so the receiver always decodes
+D-PHY. Define it as a bit, as csid-340 does, and write phy_sel to it
+with FIELD_PREP().
+
+Reviewed-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ drivers/media/platform/qcom/camss/camss-csid-680.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+index 345a67c8f..58124a4ff 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -102,7 +102,7 @@
+ #define		CSI2_RX_CFG0_DL3_INPUT_SEL			16
+ #define		CSI2_RX_CFG0_PHY_NUM_SEL			20
+ #define		CSI2_RX_CFG0_PHY_SEL_BASE_IDX			1
+-#define		CSI2_RX_CFG0_PHY_TYPE_SEL			24
++#define		CSI2_RX_CFG0_PHY_TYPE_SEL			BIT(24)
+ #define		CSI2_RX_CFG0_TPG_MUX_EN				BIT(27)
+ #define		CSI2_RX_CFG0_TPG_MUX_SEL			GENMASK(29, 28)
+ 
+@@ -202,6 +202,8 @@ static void __csid_configure_rx(struct csid_device *csid,
+ 			<< CSI2_RX_CFG0_PHY_NUM_SEL;
+ 	}
+ 
++	val |= FIELD_PREP(CSI2_RX_CFG0_PHY_TYPE_SEL, phy->phy_sel);
++
+ 	writel(val, csid->base + CSID_CSI2_RX_CFG0);
+ 
+ 	val = CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN;
+
+-- 
+2.53.0
+

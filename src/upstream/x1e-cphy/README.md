@@ -56,3 +56,21 @@ O'Donoghue, Vinod Koul and David Heidelberg, with Cc to Neil Armstrong,
 Vladimir Zapolskiy, Loic Poulain, Mauro, Mani, linux-phy, linux-media,
 linux-arm-msm and LKML. The working tree is the b4 branch `x1e-cphy-rfc`
 in `06-camera/linux-next-sparse` on SP11.
+
+## v2 (16 Oct 2026, draft, not sent)
+
+`patches/v2/` is RFC v2, six patches, with the review from Bryan, Loic and Nihal
+addressed (changelog in the cover letter). New: C-PHY helpers in the PHY layer,
+a D-PHY init-sequence rename, the settle count computed instead of fixed,
+lanes_enable() split into helpers, no separate bus_type.
+
+Tested on the sp11-next-lab boot (`lab/build-next2.sh`, `lab/next2-tests.sh`):
+
+- front IMX681, C-PHY: 3844x2640 at 30 fps, colour bars byte-identical to the
+  v1 capture (md5 8c1d6d97...); timer 400 MHz, computed settle count 28;
+- settle sweep (`lab/settle-sweep.sh`): 6, 14, 20, 34, 48 give identical frames,
+  64 gives none;
+- rear OV13858, D-PHY: 29.9 fps, settle count 18 as before.
+
+Every commit builds on its own. Patches 1-4 apply to next-20261015 alone; 5-6
+need David Heidelberg's CAMSS C-PHY v9.

@@ -1,0 +1,110 @@
+From: George Neacsu <geocausa@gmail.com>
+Date: Fri, 16 Oct 2026 11:51:36 +0100
+Subject: [PATCH RFC v2 6/6] media: qcom: camss: Configure C-PHY through the
+ PHY API
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261016-x1e-cphy-rfc-v2-6-5e6a49f5c3c5@gmail.com>
+References: <20261016-x1e-cphy-rfc-v2-0-5e6a49f5c3c5@gmail.com>
+In-Reply-To: <20261016-x1e-cphy-rfc-v2-0-5e6a49f5c3c5@gmail.com>
+To: Bryan O'Donoghue <bod@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ David Heidelberg <david@ixit.cz>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, 
+ Nihal Kumar Gupta <nihal.gupta@oss.qualcomm.com>, 
+ Vikram Sharma <vikram.sharma@oss.qualcomm.com>, 
+ Suresh Vankadara <svankada@qti.qualcomm.com>, tjose@qti.qualcomm.com, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, linux-phy@lists.infradead.org, 
+ linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792147891; l=2721;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=h2f1XJQ+5JlXaZmjpPhjxmlKv/KyMHpAmBILtl/n57o=;
+ b=ANk2EikbulDuL6QKn2SuNBTHadVvNvIiYlDX6dsuOoq3D9UxktrRss9M53zW22Sh2sb7T0/9c
+ g7rNNpO/uUQB4j3mztmiH2oNGDbMJmYhPFVq5B09X1mzdj98OaYmdLp
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
+
+With a PHY API CSIPHY, csiphy_stream_on() always asks for D-PHY. Take
+the PHY mode from the endpoint and pass it straight to phy_set_mode(),
+and for C-PHY fill the options from the link frequency with
+phy_mipi_cphy_get_default_config_for_link_freq().
+
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ drivers/media/platform/qcom/camss/camss-csiphy.c | 27 ++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index f44f2aeb9..e5ee1f9e1 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -329,17 +329,20 @@ static int csiphy_stream_on(struct csiphy_device *csiphy)
+ 	u8 bpp = csiphy_get_bpp(csiphy->res->formats->formats, csiphy->res->formats->nformats,
+ 				csiphy->fmt[MSM_CSIPHY_PAD_SINK].code);
+ 	struct csiphy_lanes_cfg *lncfg = &csiphy->cfg.csi2->lane_cfg;
+-	struct phy_configure_opts_mipi_dphy *dphy_cfg;
+-	union phy_configure_opts dphy_opts = { 0 };
++	union phy_configure_opts opts = { 0 };
+ 	struct device *dev = csiphy->camss->dev;
+ 	u8 num_lanes = lncfg->num_data;
++	enum phy_mode mode;
+ 	s64 link_freq;
+ 	int ret;
+ 
+-	dphy_cfg = &dphy_opts.mipi_dphy;
++	if (lncfg->phy_cfg == V4L2_MBUS_CSI2_CPHY)
++		mode = PHY_MODE_MIPI_CPHY;
++	else
++		mode = PHY_MODE_MIPI_DPHY;
+ 
+ 	link_freq = camss_get_link_freq(&csiphy->subdev.entity, bpp, num_lanes,
+-					csiphy->cfg.csi2->lane_cfg.phy_cfg == V4L2_MBUS_CSI2_CPHY);
++					mode == PHY_MODE_MIPI_CPHY);
+ 
+ 	if (link_freq <= 0) {
+ 		dev_err(dev,
+@@ -347,23 +350,29 @@ static int csiphy_stream_on(struct csiphy_device *csiphy)
+ 		return -EINVAL;
+ 	}
+ 
+-	ret = phy_mipi_dphy_get_default_config_for_hsclk(link_freq, num_lanes,
+-							 dphy_cfg);
++	if (mode == PHY_MODE_MIPI_CPHY)
++		ret = phy_mipi_cphy_get_default_config_for_link_freq(link_freq,
++								     num_lanes,
++								     &opts.mipi_cphy);
++	else
++		ret = phy_mipi_dphy_get_default_config_for_hsclk(link_freq,
++								 num_lanes,
++								 &opts.mipi_dphy);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Invalid config for link frequency %lld\n",
+ 			link_freq);
+ 		return ret;
+ 	}
+ 
+-	ret = phy_set_mode(csiphy->phy, PHY_MODE_MIPI_DPHY);
++	ret = phy_set_mode(csiphy->phy, mode);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to set phy mode\n");
+ 		return ret;
+ 	}
+ 
+-	ret = phy_configure(csiphy->phy, &dphy_opts);
++	ret = phy_configure(csiphy->phy, &opts);
+ 	if (ret) {
+-		dev_err(dev, "failed to configure MIPI D-PHY\n");
++		dev_err(dev, "failed to configure the PHY\n");
+ 		goto error;
+ 	}
+ 
+
+-- 
+2.53.0
+

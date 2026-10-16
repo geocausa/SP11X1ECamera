@@ -1,0 +1,129 @@
+From: George Neacsu <geocausa@gmail.com>
+Subject: [PATCH RFC v2 0/6] phy: qcom-mipi-csi2: C-PHY for X1E80100
+Date: Fri, 16 Oct 2026 11:51:30 +0100
+Message-Id: <20261016-x1e-cphy-rfc-v2-0-5e6a49f5c3c5@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22NzQrCMBCEX6Xs2ZXdqLXtSRB8AK/SQ4hJs2B/S
+ KS0lL67IWeP3wzzzQbRBrERmmKDYGeJMg4J1KEA4/XQWZR3YlCkSia+4MIWzeRXDM6gIq5KMhX
+ VVwdpMgXrZMm6Fzwfd2hT6CV+x7Dmi5lz9d82MxKyOzlda1efSd+6XsvnaMYe2n3ff0Lqm8utA
+ AAA
+X-Change-ID: 20261015-x1e-cphy-rfc-201860c8097f
+To: Bryan O'Donoghue <bod@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ David Heidelberg <david@ixit.cz>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, 
+ Nihal Kumar Gupta <nihal.gupta@oss.qualcomm.com>, 
+ Vikram Sharma <vikram.sharma@oss.qualcomm.com>, 
+ Suresh Vankadara <svankada@qti.qualcomm.com>, tjose@qti.qualcomm.com, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, linux-phy@lists.infradead.org, 
+ linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ George Neacsu <geocausa@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792147891; l=4578;
+ i=geocausa@gmail.com; s=20261015; h=from:subject:message-id;
+ bh=E0Kb1AVlzGzrnhg6xurew1bYd56P+mbFRiHXfxnXhbA=;
+ b=BjKwk5UL841CmoGzAK77FiioxFp5RcSR63MdFxQypwvax4hNIffAkoJlbYSCtFgk5mkANBKVX
+ WFdmUvCZPH4BEBiG+VEUfQxRrlcPatjXkTDUESAVsrgDIEwemjaBl+n
+X-Developer-Key: i=geocausa@gmail.com; a=ed25519;
+ pk=KyQk/iWbxsikewDBh0SwlHI51RvAqahD3loqmRp9DVI=
+
+Hi Bryan, Vinod, David,
+
+The Snapdragon Surface Pro 11's front camera, an IMX681, is on CSIPHY2
+over one MIPI C-PHY trio. linux-next has the CSI2 PHY driver and the CAMSS
+PHY API path, and C-PHY is the piece still missing for this camera. This
+series adds it:
+
+1. PHY_MODE_MIPI_CPHY and C-PHY configuration options in the generic PHY
+   framework, because CAMSS had no way to ask the PHY for C-PHY;
+2. C-PHY configuration helpers, the analogue of
+   phy_mipi_dphy_get_default_config_for_hsclk();
+3. a rename of the D-PHY init sequence in qcom-mipi-csi2;
+4. C-PHY in qcom-mipi-csi2, with the X1E80100 sequence taken from
+   Qualcomm's GPL-2.0 downstream header;
+5. the CSID 680 PHY type select, which is defined but never written;
+6. C-PHY in csiphy_stream_on() for PHY API CSIPHYs.
+
+The base is next-20261015 plus David's "media: camss: Add support for
+C-PHY configuration on Qualcomm platforms" v9, which provides phy_cfg,
+the CSID phy_sel and the C-PHY link frequency that 5 and 6 use. Its 8/9
+needed porting by hand onto the PHY API changes. Patches 1-4 apply to
+linux-next on their own.
+https://lore.kernel.org/all/20260617-qcom-cphy-v9-0-83da8a8e4e44@ixit.cz/
+
+Tested on the Surface Pro 11 (X1E80100), through the upstream stack: CSI2
+PHY nodes as in Bryan's x1e80100 camera DT v7, and CAMSS in PHY API mode,
+with raw capture over RDI:
+- front IMX681 (Sergey's and Andre's v8 driver plus its C-PHY RFC) on
+  CSIPHY2, one C-PHY trio at 2.4 Gsym/s: 3844x2640 at 30 fps, and the
+  sensor's colour bars are byte-identical to the pattern captured with an
+  out-of-tree driver. The settle count is now computed (28 at a 400 MHz
+  timer), and any value from 6 to 48 gives the same frames;
+- rear OV13858 on CSIPHY1, four D-PHY lanes: 29.9 fps with the same
+  settle count as before the series.
+The kernel was 7.1.5, with linux-next's CAMSS and CSI2 PHY built as
+modules; the test build needed shims only for API differences.
+
+Open question, from Nihal: the X1E table is Qualcomm's 2.5 Gsps one, and
+downstream picks C-PHY settings by symbol rate. I would keep a single
+table here and add selection by rate when a second rate is needed,
+unless you would rather have the structure now.
+
+Thanks,
+George
+
+---
+Changes in v2:
+- phy: rename lanes to trios (Loic), make symbol_rate unsigned long long
+  so 32-bit can hold rates above 4.29 Gsym/s, and keep Bryan's R-b for
+  that patch
+- phy: new patch with the C-PHY helpers (Bryan, Loic)
+- qcom-mipi-csi2: new patch renaming init_seq/lane_array_size to
+  dphy_init_seq/dphy_lane_array_size (Bryan)
+- qcom-mipi-csi2: no separate bus_type; the endpoint sets phy_mode and
+  set_mode() checks against it (Nihal)
+- qcom-mipi-csi2: if/else instead of the ternaries, one declaration per
+  line, and lanes_enable() split into lane mask and polarity helpers
+  instead of the goto (Bryan, Nihal)
+- qcom-mipi-csi2: configure() uses the helpers and keeps the link
+  frequency, so clocks scale as for D-PHY
+- qcom-mipi-csi2: compute the C-PHY settle count instead of the fixed
+  table value; blank lines between the per-trio blocks; fsleep() for the
+  sequence delays (Nihal)
+- qcom-mipi-csi2: drop the video-interfaces.h include, no longer needed
+- csid-680: PHY_TYPE_SEL as a bit, written with FIELD_PREP() (Loic), and
+  Loic's R-b
+- camss-csiphy: the helper, and an enum phy_mode passed straight to
+  phy_set_mode() (Bryan)
+- Link to v1: https://lore.kernel.org/r/20261015-x1e-cphy-rfc-v1-0-1f3fa9af940a@gmail.com
+
+---
+George Neacsu (6):
+      phy: Add MIPI C-PHY mode and configuration options
+      phy: Add MIPI C-PHY configuration helpers
+      phy: qcom-mipi-csi2: Rename the D-PHY init sequence
+      phy: qcom-mipi-csi2: Add C-PHY support for X1E80100
+      media: qcom: camss: csid-680: Select C-PHY in the receiver
+      media: qcom: camss: Configure C-PHY through the PHY API
+
+ drivers/media/platform/qcom/camss/camss-csid-680.c |   4 +-
+ drivers/media/platform/qcom/camss/camss-csiphy.c   |  27 ++-
+ drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c | 224 ++++++++++++++++++---
+ drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c     |  53 ++++-
+ drivers/phy/qualcomm/phy-qcom-mipi-csi2.h          |   6 +-
+ include/linux/phy/phy-mipi-cphy.h                  |  88 ++++++++
+ include/linux/phy/phy.h                            |   5 +
+ 7 files changed, 364 insertions(+), 43 deletions(-)
+---
+base-commit: 4a926a0ea6c65089285eb3ccb84ac6b02b22dee5
+change-id: 20261015-x1e-cphy-rfc-201860c8097f
+
+Best regards,
+-- 
+George Neacsu <geocausa@gmail.com>
+
