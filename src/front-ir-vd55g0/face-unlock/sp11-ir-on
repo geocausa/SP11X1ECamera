@@ -1,0 +1,10 @@
+#!/bin/sh
+# PAM helper (pam_exec, before pam_howdy): start the SP11 IR bridge for a short window so Howdy has a
+# camera; the IR LED is armed only while the bridge runs. Never fails the PAM stack.
+[ -e /dev/video42 ] || exit 0
+lsmod | grep -q '^vd55g1' || exit 0
+if ! systemctl is-active -q sp11-ir-auth; then
+  systemd-run --quiet --collect --unit=sp11-ir-auth /usr/bin/python3 /usr/local/sbin/sp11-ir-bridge --seconds 8 >/dev/null 2>&1 || exit 0
+  sleep 1.5
+fi
+exit 0

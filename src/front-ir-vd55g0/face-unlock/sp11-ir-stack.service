@@ -1,0 +1,12 @@
+[Unit]
+Description=SP11 IR camera stack (lab boot only: camss, VD55G0, IR LED, /dev/video42)
+ConditionKernelCommandLine=sp11_entry=7.1.5-sp11-ir-flash-lab
+After=systemd-modules-load.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh /root/imx681-test/ir-stack-up.sh
+
+[Install]
+WantedBy=multi-user.target
