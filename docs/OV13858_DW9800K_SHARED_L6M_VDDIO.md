@@ -125,8 +125,10 @@ Do not overwrite the Golden audio/DTB/initrd. If hardware validation
 succeeds, split/update RFC changes as reviewers request and include the
 actual board DTS binding in a **separate**, reviewed patch.
 
-**No physical test, build, review, upstream submission or Oaklee repository
-mutation has been performed as part of this staging task.**
+**No physical camera test, upstream submission, boot artifact replacement,
+or Oaklee repository mutation has been performed.** A subsequent isolated
+SP11 Linux driver-object build and DT binding check succeeded; see
+[native build receipt](../evidence/SP11_OV13858_DW9800K_UPSTREAM_BUILD_20261121.md).
 
 ## Kernel staging policy
 
@@ -147,3 +149,14 @@ builds Image/dtbs/modules **without installing any of them**. The script
 passed Bash syntax validation only; execution requires a Linux build host
 with the pinned kernel commit and compiler/dependencies. No change to
 Golden or Oaklee repositories was made.
+
+## Subsequent on-device build validation — 21 November 2026
+
+On SP11 Linux running `7.3.0-sp11-unified13`, the mainline-pinned
+`dw9719.o` compiled with GCC 15.3; the amended DT schema passed
+`dt_binding_check` with dtschema 2026.9 and yamllint 1.38.0.
+Both **unmodified baseline** Denali OLED/X1E and LCD/X1P DTBs compiled.
+Live RPMh command database contains `ldom6` and `ldob16`, but
+PM8010/m regulator group and the L6M input supply are not present in the
+running Denali DTS. Do **not** interpret build success as hardware validation.
+See the [full test receipt](../evidence/SP11_OV13858_DW9800K_UPSTREAM_BUILD_20261121.md).
