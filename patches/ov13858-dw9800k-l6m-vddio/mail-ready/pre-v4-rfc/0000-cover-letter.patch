@@ -1,0 +1,63 @@
+From b64fc0d72127265da5ff8066df9dcf50c515868c Mon Sep 17 00:00:00 2001
+From: George Neacsu <geocausa@gmail.com>
+Date: Sat, 21 Nov 2026 21:34:04 +0000
+Subject: [PATCH RFC 0/2] media: i2c: dw9719: manage optional I/O supply
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Griffin Kroah-Hartman <griffin.kroah@fairphone.com>,
+    André Apitzsch <git@apitzsch.eu>,
+    Luca Weiss <luca.weiss@fairphone.com>,
+    linux-media@vger.kernel.org,
+    devicetree@vger.kernel.org
+
+On Surface Pro 11, the DW9800K's 2.9 V VDD and its 1.8 V
+I/O supply are independent. The latter shares PM8010 L6M with the
+OV13858 rear camera sensor's DOVDD. The VCM will not answer CCI
+transactions when that I/O rail is down, and forcing L6M always-on
+is undesirable.
+
+This RFC models the I/O supply as an optional vddio regulator consumer
+of the dw9719 driver. The actuator enables vddio before VDD, releases
+it after VDD, and properly unwinds both supplies on failures. Boards
+without the property retain their existing behavior.
+
+Hardware validation on an X1E80100 Surface Pro 11 OLED with the
+experimental downstream CCI/CAMSS and rear-camera DT:
+- DW9800K bound independently of OV13858 and accepted focus controls.
+- PM8010 L6M enable count: 0 with both devices idle; 1 with the
+  sensor streaming alone; 2 when sensor and VCM were both open;
+  then 1 on VCM close while streaming; finally 0 on stream stop.
+- L16B VCM VDD became idle after the VCM was closed, without
+  interrupting ongoing OV13858 streaming.
+- OV13858 RAW10 capture: 4224x3136 around 30 fps, sensor V4L2
+  compliance 46/46. The VCM compliance test was 45/46 (existing
+  control-event subscription limitation).
+- Four successful Linux pm_test=devices callback cycles followed by
+  focus writes and 30-frame captures. This is not a claim of full
+  system suspend or optical focus-quality validation.
+
+This test used the original pre-v4 DW9719 driver plus the optional
+vddio patch. We ALSO built and live-tested the driver change alongside
+the separately posted DW9800K v4 cleanup (2026-11-19): successful
+probe/focus control and idle L6M/L16B off. Because that series
+proposes a separate dongwoon,dw9800k.yaml binding, its binding needs
+a corresponding vddio-supply property. The v4 series is under
+review and the DT ABI discussion remains open, so this RFC targets
+the pinned pre-v4 mainline base; please advise preferred integration
+order once that series settles.
+
+The exact PM8010 L6M input parent on Denali is not schematic-proven;
+board-level DTS is deliberately excluded from this driver RFC.
+
+George Neacsu (2):
+  dt-bindings: media: i2c: dw9719: document optional I/O regulator
+  media: i2c: dw9719: manage optional vddio supply
+
+ .../bindings/media/i2c/dongwoon,dw9719.yaml   |  5 ++
+ drivers/media/i2c/dw9719.c                    | 49 +++++++++++++++++--
+ 2 files changed, 49 insertions(+), 5 deletions(-)
+
+
+base-commit: c44104f3642da720164042623e4832836aefdd8e
+-- 
+2.55.0
+
