@@ -1,0 +1,60 @@
+From fff04358a9fd619283cc41f7ad2be73e3f7e786f Mon Sep 17 00:00:00 2001
+From: George Neacsu <geocausa@gmail.com>
+Date: Sat, 21 Nov 2026 21:36:16 +0000
+Subject: [PATCH 1/2] dt-bindings: media: i2c: dongwoon: document optional VCM
+ I/O rail
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Griffin Kroah-Hartman <griffin.kroah@fairphone.com>,
+    André Apitzsch <git@apitzsch.eu>,
+    linux-media@vger.kernel.org,
+    devicetree@vger.kernel.org
+
+On Surface Pro 11, the DW9800K shares the rear camera's L6M 1.8 V
+digital I/O rail but has a separate L16B 2.9 V VDD supply.
+
+Document optional vddio-supply in the existing dw9719 binding and in
+the newly separated DW9800K binding proposed by the in-flight v4
+series. Boards without a separate I/O supply are unaffected.
+
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ .../devicetree/bindings/media/i2c/dongwoon,dw9719.yaml      | 5 +++++
+ .../devicetree/bindings/media/i2c/dongwoon,dw9800k.yaml     | 6 ++++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+index 38db0764c..0b76828ef 100644
+--- a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+@@ -28,6 +28,11 @@ properties:
+   vdd-supply:
+     description: VDD power supply
+ 
++  vddio-supply:
++    description: |
++      Optional I/O supply for the actuator interface. This rail may be shared
++      with the camera sensor's digital I/O supply and is enabled before VDD.
++
+   dongwoon,sac-mode:
+     description: |
+       Slew Rate Control mode to use: direct, LSC (Linear Slope Control) or
+diff --git a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9800k.yaml b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9800k.yaml
+index 99f3b506c..79a331684 100644
+--- a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9800k.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9800k.yaml
+@@ -28,6 +28,12 @@ properties:
+   vdd-supply:
+     description: VDD power supply, can range from 2.3V to 4.8V
+ 
++  vddio-supply:
++    description: |
++      Optional I/O supply for the actuator interface. This rail may be
++      shared with the camera sensor digital I/O supply and is enabled
++      before VDD.
++
+   dongwoon,sac-mode:
+     description: >
+       Slew Rate Control mode to use: direct, LSC (Linear Slope Control) or
+-- 
+2.55.0
+
