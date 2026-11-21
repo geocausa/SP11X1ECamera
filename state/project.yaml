@@ -1,114 +1,73 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-08-26
-machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E001-oracle-map
-phase: rear-dphy-bringup
-status: oracle-routing-complete
+updated: 2026-11-21
+machine: Microsoft Surface Pro 11 Denali X1E80100 OLED
+state_id: E002-rear-vddio-hardware-verified
+phase: upstream-vddio-submission-prep
+status: rear-camera-vcm-shared-power-tested
 
 golden:
+  protected: true
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
+  rule: never overwrite Golden or the accepted unified13 default
+
+accepted_baseline:
+  boot_entry: sp11-unified13-maintenance
+  kernel_release: 7.3.0-sp11-unified13
   protected: true
-  rule: never overwrite Golden with an unproven camera candidate
 
-workspace:
-  canonical: /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
-  kernel_build_anchor: /home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
-
-machines:
-  sp11_linux:
-    role: primary Linux build/deploy/runtime target
-  sp11_windows:
-    role: same physical SP11; Windows hardware oracle and KD target
-  sp7_windows:
-    role: debugger/oracle companion; KD and USB/EEM host when useful
+experimental_boot:
+  kernel_release: 7.3.0-sp11-camera-rfc1+
+  one_shot_grub_entry: sp11-camera-autofocus-rfc2
+  next_entry_cleared: true
+  oled_dtb: x1e80100-microsoft-denali-autofocus-rfc2.dtb
+  image_sha256: ec6b68c94873a761d409955fc2c65c2d559396a9a27c94235253ff1d9a5f26af
+  dtb_sha256: 5e3055f6606c64e50c016c21979745fed1d3d4eb89fc1cd6514248f99546684e
 
 camera_hardware:
-  front_rgb:
-    acpi_id: SONY0681
-    silicon: Sony IMX681
-    surface_subsystem: MSHW0490
-    mclk_observed_resource: cam_cc_mclk4_clk
-  rear_rgb:
-    acpi_id: OVTID858
-    silicon: OmniVision OV13858
-    surface_subsystem: MSHW0491
-    mclk_observed_resource: cam_cc_mclk1_clk
-  front_ir:
-    acpi_id: SMO55F0
-    silicon: ST VD55G0
-    surface_subsystem: MSHW0492
-    mclk_observed_resource: cam_cc_mclk0_clk
-  platform:
-    acpi_id: QCOM0C32
-    silicon: Qualcomm Spectra 695
-    surface_subsystem: MSHW0495
+  rear_sensor: OV13858
+  rear_sensor_address: 0x10
+  rear_actuator: DW9800K
+  rear_actuator_address: 0x0c
+  cci_controller: 0
+  cci_master: 1
+  csiphy: 1
+  dphy_lanes: 4
+  mclk_hz: 19200000
+  vcm_vdd: vreg_l16b_2p9
+  shared_sensor_dovdd_and_vcm_vddio: vreg_l6m_1p8
+  l6m_parent_electrical_wiring_verified: false
 
-windows_oracle_routing:
-  rear_rgb:
-    cci_controller: 0
-    cci_master: 1
-    csiphy: 1
-    bus_type: dphy
-    lanes: 4
-    link_frequency_hz: 592800000
-    lane_bit_rate_bps: 1185600000
-  front_rgb:
-    cci_controller: 1
-    cci_master: 1
-    csiphy: 2
-    bus_type: cphy
-    trios: 1
-  front_ir:
-    cci_controller: 0
-    cci_master: 0
-    csiphy: 0
+validation:
+  boot: passed
+  ov13858_probe: passed
+  dw9800k_probe: passed
+  raw_capture_4224x3136: passed_3_frames_around_30fps
+  synthetic_pattern_raw_capture: passed_3_identical_frames
+  ov13858_v4l2_compliance: 46_of_46
+  dw9719_v4l2_compliance: 45_of_46_control_event_subscription_missing
+  focus_control_register_transactions: passed
+  physical_lens_motion_and_optical_quality: not_tested
+  shared_l6m_vote_counts: [0, 1, 2, 1, 0]
+  actuator_idle_powerdown: passed
+  device_pm_callbacks: four_cycles_passed
+  full_deep_standby: not_tested
+  timed_rtc_wakeup: unavailable
+  github_branch: wip/ov13858-dw9800k-l6m-vddio-untested-20261121
+  upstream_dw9800k_v4_plus_vddio_probe_focus_autosuspend: passed
+  standalone_v4_binding_validation: passed
+  upstream_v4_merge_status: unmerged_review_open
 
-linux_baseline:
-  video_nodes: 0
-  media_nodes: 0
-  config_video_qcom_camss: module
-  qcom_camss_module_installed: true
-  i2c_qcom_cci_module_installed: true
-  denali_camera_graph_enabled: false
+evidence:
+  shared_rail: experiments/E002-sp11-ov13858-autofocus-rfc/EVIDENCE-SHARED-RAIL-PM-20261121.md
+  raw_capture: experiments/E002-sp11-ov13858-autofocus-rfc/EVIDENCE-LOW-LIGHT-CAPTURE-20261121.md
+  patches_pre_v4: patches/ov13858-dw9800k-l6m-vddio/mail-ready/pre-v4-rfc
+  patches_post_v4_preview: patches/ov13858-dw9800k-l6m-vddio/mail-ready/post-v4-preview
 
-strategy:
-  reuse_upstream:
-    - X1E80100 CAMSS
-    - CCI
-    - CSI PHY where correct
-    - CSID/VFE
-    - media-controller/V4L2
-  derive_from_windows:
-    - Denali topology
-    - power/reset sequencing
-    - clocks and PMIC votes
-    - sensor modes and register lifecycle
-    - CSI lane/trio configuration
-    - privacy/illuminator behaviour
-  sensor_order:
-    - OV13858 rear
-    - IMX681 front
-    - VD55G0 IR
-
-current_experiment: E001-windows-oracle-map
-next_experiment: E002-rear-ov13858-dphy
-next_action: >-
-  Begin E002 from protected FullIO v19c: audit current X1E CAMSS/CCI/CSIPHY support and Denali
-  base DT, add only the rear OV13858 Windows-derived power/control/PHY path on CCI0 master1 and
-  CSIPHY1, preserve a separate candidate kernel/DT/boot payload, and prove enumeration before stream.
-
-handoff:
-  first_read:
-    - CONTINUE.md
-    - AGENTS.md
-    - PROJECT_STATE.md
-    - state/project.yaml
-  live_check: ./tools/project-status.sh
-  update_before_session_end:
-    - PROJECT_STATE.md
-    - state/project.yaml
-    - current experiment record
-    - git commit and push
+next_action: >
+  Reply with exact tested OLED L6M shared-supply evidence to Haipeng,
+  Sakari and Sergey; coordinate with Griffin on evolving DW9800K v4
+  binding ABI, then submit one version of optional-vddio RFC on final
+  upstream base. Keep board parent and full deep-suspend claims separate.
