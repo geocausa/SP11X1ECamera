@@ -1,6 +1,6 @@
 # E002 — SP11 OLED OV13858 + DW9800K runtime hardware experiment
 
-**Status:** Preboot build in progress (2026-11-21 UTC). **NO autofocus, video capture, suspend, or idle-rail success yet.**
+**Status:** Full experimental kernel boot, rear camera capture, DW9800K focus-control and shared-regulator power cycling **HARDWARE TESTED on SP11 OLED** (21 Nov 2026). **Still RFC / NOT SUBMITTED / not optically verified / not full deep-sleep tested.** See [hardware results](HARDWARE_RESULTS_20261121.md).
 
 ## Purpose
 
@@ -22,9 +22,10 @@ probe, focus commands, streaming, and repeated close/reopen.
   `/home/geoca/build/sp11-vcm-upstream-rfc-20261121/experiment/source`
   and `experiment/out`; full compile command
   `make ARCH=arm64 O=... -j8 Image modules`.
-- Baseline source, original build output, accepted `/boot`,
-  `/lib/modules/7.3.0-sp11-unified13` and all Oaklee repositories
-  **never edited**.
+- Baseline source, original build output, accepted unified13 and Golden
+  `/boot` payloads, `/lib/modules/7.3.0-sp11-unified13` and all Oaklee
+  repositories **were not edited**. New, separate `/boot` and module paths
+  and new one-shot GRUB entries were added for the experiment.
 - Config is accepted unified13 copied then `LOCALVERSION` made unique;
   `CONFIG_VIDEO_OV13858=m`, `CONFIG_VIDEO_DW9719=m`,
   `CONFIG_I2C_QCOM_CCI=m`, `CONFIG_VIDEO_QCOM_CAMSS=m`.
@@ -73,8 +74,12 @@ physical L6M input. This experiment must not be described as proving it.
 ## Validation completed BEFORE kernel boot
 
 - Candidate OLED autofocus DTB: **DTC PASS**.
-- Candidate DTB SHA256:
+- Initial RFC1 DTB SHA256:
   `cd741078209eeed6fe75cdc1da0d6cf748b82f884dd8044fba950a503e9c4279`.
+  **Live RFC2 boot** additionally uses the standard sensor
+  `lens-focus = <&rear_vcm>;` property; RFC2 DTB SHA256
+  `5e3055f6606c64e50c016c21979745fed1d3d4eb89fc1cd6514248f99546684e`.
+  This branch's current DTS source corresponds to RFC2.
 - `dt_binding_check` separately for CAMSS, DW9719 and OV13858 bindings:
   **PASS**, including generated binding examples.
 - Full `dt-mk-schema` and `dt-validate`: **PASS** for the camera
@@ -86,7 +91,7 @@ physical L6M input. This experiment must not be described as proving it.
   [native mainline validation](../../evidence/SP11_OV13858_DW9800K_UPSTREAM_BUILD_20261121.md).
 - Installed `v4l-utils` and `libcamera-tools` via APT for testing.
 
-## Hardware test acceptance criteria
+## Hardware test acceptance criteria (original checklist; results above supersede preboot plan)
 
 1. One-shot boot of a **new**, separately staged kernel/Image/DTB/initrd
    with accepted `sp11-unified13-maintenance` as permanent GRUB default.
