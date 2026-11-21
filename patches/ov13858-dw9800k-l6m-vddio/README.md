@@ -42,9 +42,14 @@ deferred probing. I2C detection failures now unwind the enabled supplies.
 - Patch rebased against the explicitly recorded mainline source blobs: **yes**.
 - Review / static anchor checks during preparation: **yes**.
 - `git apply --check` against an extracted kernel checkout: **NOT RUN**.
-- C build / DT binding validation / hardware or runtime PM tests: **NOT RUN**.
+- Temporary \`git apply\`, reverse check, reverse apply, source restoration: **PASS**.\n- C build / DT binding validation / hardware or runtime PM tests: **NOT RUN**.\n- Isolated build helper Bash syntax (\`bash -n\`): **PASS**; helper execution/build: **NOT RUN**.
 - Physical SP11 Linux access in this session: **unavailable** (device on Windows).
 - Tested-by / Reviewed-by / Signed-off-by: **none claimed**.
 
 Do **not** redistribute as validated, submit upstream, apply to production,
 or update protected Golden boot artifacts until the validation plan is complete.
+
+## 21 November 2026 provenance additions
+
+- [Verified regulator mapping and test results](../../docs/OV13858_DW9800K_REGULATOR_MAP_20261121.md): Linux `vreg_l6m_1p8` = PM8010/m LDO6; `vreg_l16b_2p9` = PM8550/b LDO16, but the Denali PM8010 input supply remains unverified.
+- [Isolated build script](../../tools/prepare-ov13858-vcm-test-kernel.sh): pins the upstream source hashes, creates only a disposable worktree and output directory and compiles the DW9719 object if a suitable Linux build host is available. It **does not install** an image and has **not been run**.
