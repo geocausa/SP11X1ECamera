@@ -32,6 +32,10 @@ The existing DW9719-family driver requests only `vdd` and probes without
 holding the OV13858 sensor runtime-PM reference. The fix should represent
 both supplies directly on the VCM and let the regulator framework share L6M.
 
+## Updated rail mapping — confirmed upstream reference, not Denali wiring
+
+The upstream `x1e80100-qcp.dts` uses PM8010 regulator `m` LDO6 (`vreg_l6m_1p8`) and PM8550 regulator `b` LDO16 (`vreg_l16b_2p9`). Our Windows oracle names match these rails, and both are known to the Linux RPMh regulator driver. **Denali does not yet define either regulator node.** The Denali PM8010 L6M **input parent supply remains unknown**; QCP's `vreg_s6g_1p8` parent cannot simply be transplanted. See [mapping report](OV13858_DW9800K_REGULATOR_MAP_20261121.md).
+
 ## Device Tree change to make separately after checking the real board DTS
 
 Place the following **illustrative, non-compilable until phandles are
@@ -75,7 +79,7 @@ full rear-camera DTS from the target build have been validated here.
 This does not rely on `regulator-always-on`, a permanent sensor runtime PM
 reference, an invented supply chain, or a boot-order delay workaround.
 
-## Validation gate (none of these checks has been run)
+## Validation gate (source-level patch apply checks passed; build and hardware checks pending)
 
 - On a disposable **mainline** kernel checkout matching the baseline
   source blobs above, run
@@ -133,3 +137,13 @@ the known-good Golden kernel, modules, initrd, and boot default. Record
 artifacts and hashes and do not describe a build as validated before an
 actual boot-and-capture test. Oaklee's repository is out of scope for all
 writes.
+
+## Prepared isolated build entry point
+
+`tools/prepare-ov13858-vcm-test-kernel.sh` creates a detached mainline
+worktree and a separate build output directory, pins driver/binding blobs,
+then invokes ARM64 LLVM DW9719 compilation. Its `--full-kernel` option
+builds Image/dtbs/modules **without installing any of them**. The script
+passed Bash syntax validation only; execution requires a Linux build host
+with the pinned kernel commit and compiler/dependencies. No change to
+Golden or Oaklee repositories was made.
