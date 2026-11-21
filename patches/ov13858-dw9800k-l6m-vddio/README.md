@@ -53,3 +53,18 @@ or update protected Golden boot artifacts until the validation plan is complete.
 
 - [Verified regulator mapping and test results](../../docs/OV13858_DW9800K_REGULATOR_MAP_20261121.md): Linux `vreg_l6m_1p8` = PM8010/m LDO6; `vreg_l16b_2p9` = PM8550/b LDO16, but the Denali PM8010 input supply remains unverified.
 - [Isolated build script](../../tools/prepare-ov13858-vcm-test-kernel.sh): pins the upstream source hashes, creates only a disposable worktree and output directory and compiles the DW9719 object if a suitable Linux build host is available. It **does not install** an image and has **not been run**.
+
+## Upstream patch split (RFC, UNTESTED)
+
+The combined patch above remains an apply/build convenience artifact.
+For upstream review **use the two separate patches below** instead:
+
+1. [0001: DT binding optional vddio supply](upstream/0001-dt-bindings-media-i2c-dongwoon-dw9719-add-vddio-supply.patch)
+2. [0002: DW9719 driver optional vddio lifecycle](upstream/0002-media-i2c-dw9719-support-optional-vddio-supply.patch)
+
+On 2026-11-21 both files passed `scripts/checkpatch.pl --no-tree --strict`
+with **0 errors, 0 warnings** and joint
+`git apply --check --whitespace=error-all` with **exit code 0**.
+This is static/source validation only; **no kernel build, DT schema test,
+SP11 device boot or autofocus test was performed**. These are RFC diffs,
+not signed-off upstream mail submissions.
