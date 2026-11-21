@@ -2,6 +2,11 @@
 
 **STATUS: PROPOSED / UNTESTED / NOT SUBMITTED**
 
+**Primary goal:** native upstream Linux support for Surface Pro 11 camera
+hardware, without dependence on Oaklee's separate integration work. Any
+test kernel should be built from our own disposable source tree and boot
+entry; upstream review remains the final acceptance target.
+
 **Scope:** rear OV13858 camera, rear VCM at 7-bit CCI/I2C address `0x0c`,
 reported compatible `dongwoon,dw9800k`. This is a board-integration proposal,
 not a tested Device Tree patch or a claim of autofocus parity.
@@ -72,7 +77,8 @@ reference, an invented supply chain, or a boot-order delay workaround.
 
 ## Validation gate (none of these checks has been run)
 
-- On a disposable kernel checkout matching the source blobs, run
+- On a disposable **mainline** kernel checkout matching the baseline
+  source blobs above, run
   `git apply --check <path-to-patch>`, then apply and build `dw9719.o`.
   Use `scripts/checkpatch.pl` and `dt_binding_check` for the amended
   `dongwoon,dw9719.yaml`; compile the **actual** SP11 DTB and run
@@ -117,3 +123,13 @@ actual board DTS binding in a **separate**, reviewed patch.
 
 **No physical test, build, review, upstream submission or Oaklee repository
 mutation has been performed as part of this staging task.**
+
+## Kernel staging policy
+
+If a new kernel is required for testing, create an isolated build from an
+explicit mainline commit with the candidate driver and verified SP11 board
+DT changes. Install as a **separate one-shot test boot entry**, preserving
+the known-good Golden kernel, modules, initrd, and boot default. Record
+artifacts and hashes and do not describe a build as validated before an
+actual boot-and-capture test. Oaklee's repository is out of scope for all
+writes.
