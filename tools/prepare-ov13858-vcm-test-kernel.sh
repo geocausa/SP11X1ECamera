@@ -23,8 +23,23 @@ full=${4:-}
   echo "Refusing system/kernel installation paths" >&2; exit 1;
 }
 command -v git >/dev/null
-command -v clang >/dev/null || { echo "Missing clang for LLVM=1 ARM64 build" >&2; exit 1; }
 command -v make >/dev/null
+
+# Native ARM64 GCC is a supported alternative on the SP11 itself.
+# Prefer LLVM where available, otherwise require native ARM64 GCC.
+if command -v clang >/dev/null; then
+  compiler_args=(LLVM=1)
+  compiler_name=clang
+else
+  [[ "$(uname -m)" == "aarch64" ]] || {
+    echo "No clang: GCC fallback is only supported for native ARM64 hosts" >&2
+    exit 1
+  }
+  command -v gcc >/dev/null || { echo "Missing native ARM64 GCC" >&2; exit 1; }
+  compiler_args=()
+  compiler_name=gcc
+fi
+echo "Using $compiler_name for an isolated ARM64 build"
 git -C "$repo" rev-parse --is-inside-work-tree >/dev/null
 rev=$(git -C "$repo" rev-parse --verify "$ref^{commit}")
 driver=$(git -C "$repo" rev-parse "$rev:drivers/media/i2c/dw9719.c")
@@ -47,15 +62,15 @@ git -C "$src" apply --check "$patch"
 git -C "$src" apply "$patch"
 echo "Applied RFC patch in disposable worktree at $src"
 
-make -C "$src" O="$out" ARCH=arm64 LLVM=1 defconfig
+make -C "$src" O="$out" ARCH=arm64 "${compiler_args[@]}" defconfig
 "$src/scripts/config" --file "$out/.config" -e MEDIA_SUPPORT -e VIDEO_DEV -e VIDEO_DW9719
-make -C "$src" O="$out" ARCH=arm64 LLVM=1 olddefconfig
-make -C "$src" O="$out" ARCH=arm64 LLVM=1 -j2 drivers/media/i2c/dw9719.o
+make -C "$src" O="$out" ARCH=arm64 "${compiler_args[@]}" olddefconfig
+make -C "$src" O="$out" ARCH=arm64 "${compiler_args[@]}" -j2 drivers/media/i2c/dw9719.o
 echo "Driver object compilation complete (NOT a board/hardware test)."
 
 if [[ "$full" == "--full-kernel" ]]; then
   echo "Building kernel artefacts only; no modules_install or /boot writes."
-  make -C "$src" O="$out" ARCH=arm64 LLVM=1 -j2 Image dtbs modules
+  make -C "$src" O="$out" ARCH=arm64 "${compiler_args[@]}" -j2 Image dtbs modules
 fi
 
 printf 'source_commit=%s\npatch_sha256=%s\nsource_dir=%s\nbuild_dir=%s\n' \
