@@ -1,6 +1,6 @@
 # E002 — SP11 OLED OV13858 + DW9800K runtime hardware experiment
 
-**Status:** Full experimental kernel boot, rear camera capture, DW9800K focus-control and shared-regulator power cycling **HARDWARE TESTED on SP11 OLED** (21 Nov 2026). **Still RFC / NOT SUBMITTED / not optically verified / not full deep-sleep tested.** See [hardware results](HARDWARE_RESULTS_20261121.md).
+**Status:** Full experimental kernel boot, rear camera capture, DW9800K focus-control and shared-regulator power cycling **HARDWARE TESTED on SP11 OLED** (21 Nov 2026). **Still RFC / NOT SUBMITTED / not optically verified / not full deep-sleep tested.** See [hardware results](HARDWARE_RESULTS_20261121.md), [shared-supply/PM/v4 evidence](EVIDENCE-SHARED-RAIL-PM-20261121.md), and [upstream email drafts](UPSTREAM-EMAIL-REPLIES-20261121.md).
 
 ## Purpose
 
