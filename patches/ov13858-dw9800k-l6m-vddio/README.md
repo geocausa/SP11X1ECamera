@@ -43,8 +43,9 @@ deferred probing. I2C detection failures now unwind the enabled supplies.
 - Review / static anchor checks during preparation: **yes**.
 - `git apply --check --whitespace=error-all` against the exact upstream source blobs: **PASS**.
 - Temporary `git apply`, reverse check, reverse apply, source restoration: **PASS**.
-- C build / DT binding validation / hardware or runtime PM tests: **NOT RUN**.
-- Isolated build helper Bash syntax (`bash -n`): **PASS**; helper execution/build: **NOT RUN**.
+- Native ARM64 GCC DW9719 object build: **PASS** on SP11 Linux. DT binding check: **PASS** (dtschema 2026.9, yamllint 1.38.0).
+- Hardware / actuator PM tests and a full deployable camera-enabled kernel: **NOT RUN**.
+- Isolated build helper Bash syntax (`bash -n`): **PASS**; executed with native GCC fallback; object build **PASS**.
 - Physical SP11 Linux access in this session: **unavailable** (device on Windows).
 - Tested-by / Reviewed-by / Signed-off-by: **none claimed**.
 
@@ -67,6 +68,16 @@ For upstream review **use the two separate patches below** instead:
 On 2026-11-21 both files passed `scripts/checkpatch.pl --no-tree --strict`
 with **0 errors, 0 warnings** and joint
 `git apply --check --whitespace=error-all` with **exit code 0**.
-This is static/source validation only; **no kernel build, DT schema test,
-SP11 device boot or autofocus test was performed**. These are RFC diffs,
+The split-patch checkpatch results were source-level checks. Subsequently
+**native driver-object and DT binding builds PASSED on SP11 Linux**, but
+no new kernel was booted and no autofocus hardware test was performed. These are RFC diffs,
 not signed-off upstream mail submissions.
+
+## Native SP11 Linux validation (later on 2026-11-21)
+
+See [native build and RPMh evidence receipt](../../evidence/SP11_OV13858_DW9800K_UPSTREAM_BUILD_20261121.md):
+mainline `c44104f3642d`, arm64 GCC 15.3, `dw9719.o` built,
+`dt_binding_check` and optional YAML lint passed, OLED/X1E and LCD/X1P
+**baseline** DTBs built. The live RPMh command database exposes `ldom6`
+and `ldob16`. The **Denali L6M input parent is unverified**;
+no new camera DTB, full boot image, rail toggling or focus test was performed.
