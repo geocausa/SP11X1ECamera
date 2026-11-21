@@ -1,0 +1,148 @@
+From b64fc0d72127265da5ff8066df9dcf50c515868c Mon Sep 17 00:00:00 2001
+From: George Neacsu <geocausa@gmail.com>
+Date: Sat, 21 Nov 2026 21:34:04 +0000
+Subject: [PATCH 2/2] media: i2c: dw9719: manage optional vddio supply
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Griffin Kroah-Hartman <griffin.kroah@fairphone.com>,
+    André Apitzsch <git@apitzsch.eu>,
+    Luca Weiss <luca.weiss@fairphone.com>,
+    linux-media@vger.kernel.org,
+    devicetree@vger.kernel.org
+
+The DW9800K lens on Surface Pro 11 cannot answer CCI commands when
+its shared 1.8 V I/O rail is off, even with its separate 2.9 V VDD
+supply enabled. Relying on the camera sensor to power that rail
+creates a probe-order dependency.
+
+Acquire optional vddio before VDD, release it after VDD, and unwind
+it on power-up failure. Independent regulator consumer votes let
+sensor streaming and lens control each retain L6M while needed and
+permit it to turn off when both are idle.
+
+Boards without vddio-supply retain the existing behavior.
+
+Tested on Surface Pro 11 OLED (X1E80100) with the OV13858 on CCI0
+master1. Repeated focus-control writes and autosuspend, simultaneous
+capture with the sensor, L6M enable counts 0/1/2, and four device PM
+callback cycles succeeded. Capture worked at 4224x3136 around 30 fps.
+
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ drivers/media/i2c/dw9719.c | 49 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 44 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/i2c/dw9719.c b/drivers/media/i2c/dw9719.c
+index 5d5da0439..8543e7ac4 100644
+--- a/drivers/media/i2c/dw9719.c
++++ b/drivers/media/i2c/dw9719.c
+@@ -86,6 +86,7 @@ struct dw9719_device {
+ 	struct device *dev;
+ 	struct regmap *regmap;
+ 	struct regulator *regulator;
++	struct regulator *vddio;
+ 	enum dw9719_model model;
+ 	u32 mode_low_bits;
+ 	u32 sac_mode;
+@@ -100,6 +101,7 @@ struct dw9719_device {
+ static int dw9719_power_down(struct dw9719_device *dw9719)
+ {
+ 	u32 reg_pwr = dw9719->model == DW9718S ? DW9718S_PD : DW9719_CONTROL;
++	int ret;
+ 
+ 	/*
+ 	 * Worth engaging the internal SHUTDOWN mode especially due to the
+@@ -107,7 +109,15 @@ static int dw9719_power_down(struct dw9719_device *dw9719)
+ 	 */
+ 	if (cci_write(dw9719->regmap, reg_pwr, DW9719_SHUTDOWN, NULL))
+ 		dev_err(dw9719->dev, "Error writing to power register\n");
+-	return regulator_disable(dw9719->regulator);
++	ret = regulator_disable(dw9719->regulator);
++	if (ret)
++		return ret;
++
++	/* Keep I/O powered until the actuator's VDD has been switched off. */
++	if (dw9719->vddio)
++		return regulator_disable(dw9719->vddio);
++
++	return 0;
+ }
+ 
+ static int dw9719_power_up(struct dw9719_device *dw9719, bool detect)
+@@ -117,9 +127,16 @@ static int dw9719_power_up(struct dw9719_device *dw9719, bool detect)
+ 	int ret;
+ 	int err;
+ 
++	/* The actuator's I2C interface may share the sensor's DOVDD rail. */
++	if (dw9719->vddio) {
++		ret = regulator_enable(dw9719->vddio);
++		if (ret)
++			return ret;
++	}
++
+ 	ret = regulator_enable(dw9719->regulator);
+ 	if (ret)
+-		return ret;
++		goto err_disable_vddio;
+ 
+ 	/*
+ 	 * Need 100us to transition from SHUTDOWN to STANDBY.
+@@ -150,7 +167,7 @@ static int dw9719_power_up(struct dw9719_device *dw9719, bool detect)
+ 
+ 		ret = cci_read(dw9719->regmap, DW9719_INFO, &val, NULL);
+ 		if (ret < 0)
+-			return ret;
++			goto err_power_down;
+ 
+ 		switch (val) {
+ 		case DW9719_ID:
+@@ -168,7 +185,8 @@ static int dw9719_power_up(struct dw9719_device *dw9719, bool detect)
+ 		default:
+ 			dev_err(dw9719->dev,
+ 				"Error unknown device id 0x%02llx\n", val);
+-			return -ENXIO;
++			ret = -ENXIO;
++			goto err_power_down;
+ 		}
+ 
+ props:
+@@ -219,8 +237,18 @@ static int dw9719_power_up(struct dw9719_device *dw9719, bool detect)
+ 	}
+ 
+ 	if (ret)
+-		dw9719_power_down(dw9719);
++		goto err_power_down;
+ 
++	return 0;
++
++err_power_down:
++	/* Preserve the original I2C error while releasing both supplies. */
++	dw9719_power_down(dw9719);
++	return ret;
++
++err_disable_vddio:
++	if (dw9719->vddio)
++		regulator_disable(dw9719->vddio);
+ 	return ret;
+ }
+ 
+@@ -372,6 +400,17 @@ static int dw9719_probe(struct i2c_client *client)
+ 		return dev_err_probe(&client->dev, PTR_ERR(dw9719->regulator),
+ 				     "getting regulator\n");
+ 
++	/* Boards without a separate I/O supply keep the existing behavior. */
++	dw9719->vddio = devm_regulator_get_optional(&client->dev, "vddio");
++	if (IS_ERR(dw9719->vddio)) {
++		ret = PTR_ERR(dw9719->vddio);
++		if (ret == -ENODEV)
++			dw9719->vddio = NULL;
++		else
++			return dev_err_probe(&client->dev, ret,
++					     "getting I/O regulator\n");
++	}
++
+ 	v4l2_i2c_subdev_init(&dw9719->sd, client, &dw9719_ops);
+ 	dw9719->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	dw9719->sd.internal_ops = &dw9719_internal_ops;
+-- 
+2.55.0
+
