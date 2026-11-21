@@ -1,0 +1,44 @@
+From 1d60db00e61a4d43cfcc310f5cefa8fb6635737c Mon Sep 17 00:00:00 2001
+From: George Neacsu <geocausa@gmail.com>
+Date: Sat, 21 Nov 2026 21:34:04 +0000
+Subject: [PATCH 1/2] dt-bindings: media: i2c: dw9719: document optional I/O
+ regulator
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Griffin Kroah-Hartman <griffin.kroah@fairphone.com>,
+    André Apitzsch <git@apitzsch.eu>,
+    Luca Weiss <luca.weiss@fairphone.com>,
+    linux-media@vger.kernel.org,
+    devicetree@vger.kernel.org
+
+Some DW9800K boards supply the actuator I/O interface from a rail
+separate from VDD. On the Surface Pro 11, this is the same L6M 1.8 V
+rail used by the OV13858 DOVDD supply; actuator VDD uses L16B.
+
+Describe an optional vddio-supply so the actuator may acquire this
+shared rail independently of the sensor. Boards without the property
+retain the existing behavior.
+
+Signed-off-by: George Neacsu <geocausa@gmail.com>
+---
+ .../devicetree/bindings/media/i2c/dongwoon,dw9719.yaml       | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+index 8e8d62436..b667b395b 100644
+--- a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+@@ -29,6 +29,11 @@ properties:
+   vdd-supply:
+     description: VDD power supply
+ 
++  vddio-supply:
++    description: |
++      Optional I/O supply for the actuator interface. This rail may be shared
++      with the camera sensor's digital I/O supply and is enabled before VDD.
++
+   dongwoon,sac-mode:
+     description: |
+       Slew Rate Control mode to use: direct, LSC (Linear Slope Control) or
+-- 
+2.55.0
+
