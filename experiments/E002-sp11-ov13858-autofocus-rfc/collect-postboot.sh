@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: MIT
 # Read-only SP11 autofocus boot and media-graph evidence collection.
 # Does not load drivers, move lenses, open/stream the sensor for capture,
-# touch power rails, request suspend, reboot or modify boot state.
+# explicitly vote power rails, request suspend, reboot or change boot state.
+# Opening a V4L2 subdevice may *indirectly* resume it and enable regulators;
+# baseline regulator state is captured before any V4L2 device is opened.
 set -uo pipefail
 expected='7.3.0-sp11-camera-rfc1+'
 actual=$(uname -r)
