@@ -1,89 +1,89 @@
-# Project state
+# SP11X1ECamera — current project state
 
-**Updated:** 2026-08-26  
-**State ID:** E001 Windows oracle map  
-**Golden remains:** SP11 Audio FullIO v19c
+**Updated:** 2026-11-21 21:40 UTC
+**Active state:** E002 — rear OV13858 / DW9800K shared regulator hardware test
+**Current active boot:** experimental `7.3.0-sp11-camera-rfc1+` on OLED/X1E80100
+**Protected known-good:** accepted `7.3.0-sp11-unified13` and Golden v19c
+**Branch:** `wip/ov13858-dw9800k-l6m-vddio-untested-20261121`
+**Scope:** own camera repository only; no Oaklee repository changes
 
-## Current boundary
+## Results confirmed on the physical SP11
 
-E001 has completed the implementation-grade static/host routing map needed to begin a Linux rear-camera experiment. The one-shot Windows oracle boot returned cleanly to Linux. Running kernel is still `7.1.5-sp11-render-parity-v4+` from FullIO v19c, GRUB `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty, and Linux still exposes zero `/dev/video*` / `/dev/media*` nodes.
+- Kernel and 8,711 modules compiled; experimental kernel booted using
+  one-shot GRUB. Golden and unified13 boot file hashes preserved.
+- OV13858 rear camera on CCI0/master1 `0x10`, CSIPHY1 four D-PHY lanes,
+  OV13858 V4L2 compliance **46/46**.
+- DW9800K actuator `0x0c` driven by `dw9719`, standard
+  `lens-focus` fwnode link; focus control updates succeed.
+  Actuator V4L2 compliance **45/46**, known missing control-event
+  subscription support (separate from supply fix).
+- RAW capture: three full-res **4224×3136** ~30 fps frames via
+  libcamera, four 1056×784 frames, and three verified identical
+  1056×784 OV13858 on-chip synthetic colour-bar frames.
+- Shared PM8010 L6M 1.8 V consumer reference counts:
+  **0 idle, 1 sensor-only, 2 sensor+actuator, 1 sensor-only, 0 idle**.
+  Actuator L16B 2.912 V automatically switches off when actuator closes,
+  without killing sensor streaming.
+- Four `pm_test=devices` cycles succeeded, each followed by focus
+  updates and 30-frame capture, no suspend failures (total kernel
+  successful fake suspend counter 6, including two earlier).
+- Griffin Kroah-Hartman's unmerged DW9800K v4 driver patch **plus**
+  optional-vddio built as isolated module and **hardware-tested**
+  with probe, 4 focus positions, autosuspend, L6M/L16B 0 idle.
+  Original module explicitly restored.
+- New v4 separate `dongwoon,dw9800k.yaml` modified with optional
+  `vddio-supply` and schema-checked successfully.
 
-No camera kernel/DT/runtime change has yet been installed.
+Detailed evidence:
+[shared regulator + PM](experiments/E002-sp11-ov13858-autofocus-rfc/EVIDENCE-SHARED-RAIL-PM-20261121.md);
+[dark room RAW capture](experiments/E002-sp11-ov13858-autofocus-rfc/EVIDENCE-LOW-LIGHT-CAPTURE-20261121.md).
 
-## Exact SP11 camera hardware
+## Not established
 
-- rear RGB: OmniVision **OV13858**, `OVTID858`, `MSHW0491`;
-- front RGB: Sony **IMX681**, `SONY0681`, `MSHW0490`;
-- front IR/Hello: ST **VD55G0**, `SMO55F0`, `MSHW0492`;
-- camera platform: Qualcomm **Spectra 695 / X1E80100**, Surface `MSHW0495`.
+- No independent schematic proof of L6M input parent:
+  `vreg_s4c_1p8` is a provisional DTS implementation.
+  No camera-enabled Denali board DTS is upstream-ready.
+- No proof of actual optical lens motion/sharpness due to unlit scene.
+- No **real full deep standby** or standby battery-power result:
+  PM8xxx RTC wakealarm unavailable. `pm_test=devices` is not deep sleep.
+- WirePlumber holds the VCM subdevice open, and thus L6M/L16B enabled
+  during desktop camera monitoring. Idle-off test requires closing
+  the VCM camera monitor. Production userspace policy still needed.
+- Current libcamera warns about OV13858 crop rectangles and uncalibrated
+  IPA. One earlier manually forced camera clock-enable error -16
+  does not invalidate successful subsequent capture, but must not
+  be misrepresented as a warning-free integration.
+- Front IMX681, IR VD55G0, and complete optical parity not covered
+  by this rear-specific E002 validation.
 
-## Windows-derived board routing
+## Patches, provenance, and mainline
 
-The exact installed `CAMP_PCFG_MSHW0495.bin` and `qccamplatform8380.sys` were decoded/reversed. The driver parser proves the packed platform connection fields and the flattened CCI-master split.
-
-| Sensor | CCI route | Receive PHY | Physical mode |
-|---|---|---|---|
-| OV13858 rear | **CCI0 master1** | **CSIPHY1** | 4-lane D-PHY |
-| IMX681 front | **CCI1 master1** | **CSIPHY2** | **1-trio C-PHY** |
-| VD55G0 IR | **CCI0 master0** | **CSIPHY0** | to be finalized later |
-
-Front IMX681 C-PHY is independently proven by Microsoft's own sensor register program: `CSI_SIGNALING_MODE (0x0111) = 3`, with Linux CCS definitions independently identifying value 3 as CSI-2 C-PHY.
-
-Windows MIPI-CSI MMIO resources line up with upstream X1E CSIPHY0/1/2/4 and CSITPG blocks, so Windows is using the same receive fabric Linux models.
-
-## Rear OV13858 first-target facts
-
-Windows power/resources:
-- reset GPIO **110**;
-- MCLK **cam_cc_mclk1_clk @ 19.2 MHz**;
-- LDO6_M 1.8 V;
-- LDO1_M 1.2 V;
-- LDO5_M 2.8 V;
-- LDO16_B 2.9 V;
-- exact D0/D3 order/delays are in E001 `power-map.md`.
-
-Probe:
-- Linux 7-bit slave address **0x10**;
-- ID register **0x300b**;
-- expected ID **0xd855**;
-- Qualcomm FAST CCI mode.
-
-Transport:
-- VC0 / RAW10;
-- four lanes (`laneAssign=0x3210`);
-- Windows route **CCI0 master1 -> CSIPHY1**;
-- 474.24 MHz RAW pixel rate => **1.1856 Gbit/s per lane**, **592.8 MHz link frequency**;
-- Microsoft's PLL is not mainline's stock 540/270 MHz OV13858 profile (`0x0300=0x05`, `0x0301=0`, `0x0302=0xf7`, `0x0303=0`).
-
-Therefore E002 must not simply wire the generic mainline OV13858 mode and call it parity. Reuse the upstream driver infrastructure, but introduce/audit an SP11 Windows-derived mode/link profile.
-
-## Reuse boundary
-
-Reuse upstream Linux:
-- X1E CAMSS;
-- CCI;
-- D-PHY/CSID/VFE/media-controller infrastructure;
-- generic OV13858 driver architecture.
-
-Derive Surface-specific behavior from Windows:
-- board routing;
-- power/reset/regulator sequencing;
-- MCLK;
-- sensor modes/PLL/link frequency;
-- front C-PHY extension;
-- later privacy LED/IR illumination and image-quality parity.
-
-## Remaining Windows parity observations
-
-Not blocking rear E002:
-- exact runtime `settleTimeNS` value used by Windows receiver;
-- privacy LED transition timing/ownership;
-- whether any specialized profile changes receiver routing.
-
-Keep them on the parity backlog; do not guess them into Linux.
+- Mainline pre-v4 base pinned at
+  `c44104f3642da720164042623e4832836aefdd8e`.
+- Pre-v4 RFC 2-patch binding+driver signed-off series is in
+  `patches/ov13858-dw9800k-l6m-vddio/mail-ready/pre-v4-rfc/`;
+  strict checkpatch **0 errors / 0 warnings** on both.
+- Pending Griffin Kroah-Hartman DW9800K v4 series
+  `20261119-b4-dw9800k_cleanup-v4-0-df26c431595e@fairphone.com`
+  proposes a separate `dongwoon,dw9800k.yaml`; maintainers
+  raised DT backwards-compatibility concerns on 2026-11-21.
+  A preview of our 2-patch adaptation for v4 is in
+  `mail-ready/post-v4-preview/`, validated against a synthesized
+  **unmerged** v4 base. Do **not** submit it unchanged as a
+  patch based on a merged kernel commit.
+- Independent X1P/LCD Haipeng Lin upstream correspondence on
+  OV13858 v2 OF and Sergey's power v4 corroborates routing,
+  sensor capture, and the need to power L6M for VCM CCI.
 
 ## Next action
 
-**E002 — rear OV13858 D-PHY infrastructure.**
+Use the two threaded upstream reply drafts in E002 to explain the
+**fully tested optional vddio solution** without claiming a real
+deep-sleep or optics test. Ask Griffin/Sakari which DW9800K binding
+layout will survive review, then rebase/send one `vddio` two-patch
+series. Independently investigate L6M input parent from Windows
+hardware evidence; address WirePlumber camera monitor idle-vote
+policy separately. Keep Golden/unified13 default unchanged.
 
-From Golden v19c, audit the current X1E CAMSS/CCI/CSIPHY source and Denali DT, then create the smallest isolated candidate that describes only the proven rear path. First milestone is safe enumeration/probe; streaming comes only after the graph and power lifecycle are proven.
+For original Windows oracle routing and power maps, see the E001
+experiment and `docs/` rather than reinterpreting this test.
