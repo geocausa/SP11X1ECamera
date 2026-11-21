@@ -41,8 +41,10 @@ deferred probing. I2C detection failures now unwind the enabled supplies.
 
 - Patch rebased against the explicitly recorded mainline source blobs: **yes**.
 - Review / static anchor checks during preparation: **yes**.
-- `git apply --check` against an extracted kernel checkout: **NOT RUN**.
-- Temporary \`git apply\`, reverse check, reverse apply, source restoration: **PASS**.\n- C build / DT binding validation / hardware or runtime PM tests: **NOT RUN**.\n- Isolated build helper Bash syntax (\`bash -n\`): **PASS**; helper execution/build: **NOT RUN**.
+- `git apply --check --whitespace=error-all` against the exact upstream source blobs: **PASS**.
+- Temporary `git apply`, reverse check, reverse apply, source restoration: **PASS**.
+- C build / DT binding validation / hardware or runtime PM tests: **NOT RUN**.
+- Isolated build helper Bash syntax (`bash -n`): **PASS**; helper execution/build: **NOT RUN**.
 - Physical SP11 Linux access in this session: **unavailable** (device on Windows).
 - Tested-by / Reviewed-by / Signed-off-by: **none claimed**.
 
