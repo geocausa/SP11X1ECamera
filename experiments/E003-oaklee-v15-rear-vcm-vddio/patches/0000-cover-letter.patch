@@ -1,0 +1,51 @@
+From a73bce281ad0f7e2e1a6c6a4bb7826b9f5022f67 Mon Sep 17 00:00:00 2001
+From: George Neacsu <geocausa@gmail.com>
+Date: Sat, 21 Nov 2026 22:08:09 +0000
+Subject: [PATCH RFC 0/3] media: i2c: dw9719: optional VDDIO on SP11 OLED
+
+This incremental series adds the rear DW9800K actuator and its
+shared power management to Oaklee's tested OV13858 rear camera
+enablement for Surface Pro 11 OLED.
+
+Exact baseline: Oaklee 52812090bd341a2a1e609f32afa4595b51a97127
+with the earlier, already-shared rear-camera board patch applied.
+The CAMSS/PHY changes from the previous November 20 handover
+must be present as appropriate; do not reapply duplicates.
+
+The lens uses PM8550 L16B 2.912 V as VDD but also requires
+PM8010 L6M 1.8 V I/O, shared with sensor DOVDD. The driver
+maintains a separate, optional regulator vote; DTS connects
+the sensor's lens-focus to DW9800K at CCI0 master1 0x0c.
+
+Tested on the physical SP11 with Oaklee kernel
+7.3.0-jg-1sp11v15-qcom-x1e and isolated Ubuntu userspace:
+- actuator probe and focus controls succeeded;
+- shared L6M votes followed 0/1/2/1/0 during open/close;
+- rear 120/120 4224x3136 RAW frames around 29.95 fps;
+- direct 240-frame capture continued across VCM open/close;
+- front IMX681 30/30 and IR VD55G0 60/60 RAW frames passed;
+- three device-PM callback cycles each followed by focus and
+  a 30-frame rear capture succeeded, with zero PM failures.
+
+The tested boot changed only a copy of the OLED DTB payload
+inside the previously qualified Oaklee EFI image; a production
+kernel/DTB build must use the normal build process. Neither real
+deep standby nor optical lens sharpness has been verified.
+
+The series is three patches numbered 0004..0006 in the handover
+ZIP to distinguish it from the previous 0001..0003 assistance.
+See README-START-HERE.md and evidence/.
+
+George Neacsu (3):
+  dt-bindings: media: i2c: dw9719: document optional I/O supply
+  media: i2c: dw9719: acquire optional vddio before VDD
+  arm64: dts: qcom: denali-oled: connect rear DW9800K VCM
+
+ .../bindings/media/i2c/dongwoon,dw9719.yaml   |  5 ++
+ .../qcom/x1e80100-microsoft-denali-oled.dts   | 17 +++++++
+ drivers/media/i2c/dw9719.c                    | 49 +++++++++++++++++--
+ 3 files changed, 66 insertions(+), 5 deletions(-)
+
+-- 
+2.53.0
+
